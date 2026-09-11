@@ -1,0 +1,1993 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta name="p:domain_verify" content="33af0ce6e1a3a376ee89b11de80781bc"/>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Free Online Whiteboard for Teaching | Victory Fluent Forum</title>
+    <meta name="description" content="Free online whiteboard for teachers and tutors. Annotate worksheets, draw lesson diagrams, teach online classes, and save notes as PDF with no login.">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://www.victoryfluentforum.com/tools/online-whiteboard">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.victoryfluentforum.com/tools/online-whiteboard">
+    <meta property="og:title" content="Free Online Whiteboard for Teaching | Victory Fluent Forum">
+    <meta property="og:description" content="Free browser whiteboard for teachers and tutors. Annotate PDFs, draw diagrams, write lesson notes, and print or save your board as PDF with no login.">
+    <meta property="og:image" content="https://www.victoryfluentforum.com/images/vff-online-whiteboard-for-teaching.webp">
+
+    <!-- Robots -->
+    <meta name="robots" content="index, follow">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Free Online Whiteboard for Teaching | Victory Fluent Forum">
+    <meta name="twitter:description" content="Free browser whiteboard for teachers and tutors. Annotate PDFs, draw diagrams, write lesson notes, and print or save your board as PDF with no login.">
+    <meta name="twitter:image" content="https://www.victoryfluentforum.com/images/vff-online-whiteboard-for-teaching.webp">
+
+    <!-- Fonts & CSS -->
+    
+    
+    <link rel="stylesheet" href="./css/theme.css">
+    <link rel="stylesheet" href="./css/toolhub-core.css">
+    <link rel="stylesheet" href="./css/whiteboard.css">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous">
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="./assets/favicon.png" type="image/png">
+
+    <!-- Inline Critical Whiteboard CSS for guaranteed zero-FOUC rendering -->
+    <style>
+      :root {
+        --wb-shell-bg: #ffffff;
+        --wb-workspace-bg: #f1f5f9;
+        --wb-canvas-bg: #ffffff;
+        --wb-toolbar-bg: #ffffff;
+        --wb-toolbar-border: #e2e8f0;
+        --wb-toolbar-shadow: 0 1px 3px rgba(15,23,42,.04), 0 4px 16px -2px rgba(15,23,42,.06);
+        --wb-btn-hover: #f1f5f9;
+        --wb-btn-active-bg: #0f172a;
+        --wb-btn-active-color: #ffffff;
+        --wb-text-dark: #0f172a;
+        --wb-text-muted: #64748b;
+        --wb-border-light: #cbd5e1;
+        --wb-canvas-border: #334155;
+        --wb-font-main: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      }
+      [data-theme="dark"] {
+        --wb-shell-bg: #0f172a;
+        --wb-workspace-bg: #080c14;
+        --wb-canvas-bg: #ffffff;
+        --wb-toolbar-bg: #0f172a;
+        --wb-toolbar-border: #1e293b;
+        --wb-toolbar-shadow: 0 4px 20px -2px rgba(0,0,0,.5);
+        --wb-btn-hover: #1e293b;
+        --wb-btn-active-bg: #2563eb;
+        --wb-btn-active-color: #ffffff;
+        --wb-text-dark: #f8fafc;
+        --wb-text-muted: #94a3b8;
+        --wb-border-light: #334155;
+        --wb-canvas-border: #475569;
+      }
+      .wb-hero-section { padding: 22px 16px 26px !important; position: relative; background: #ffffff !important; border-bottom: 1px solid rgba(15,23,42,0.08) !important; }
+      [data-theme="dark"] .wb-hero-section { background: #0b0f19 !important; border-bottom-color: #1e293b !important; }
+      @media(max-width:768px){ .wb-hero-section { padding: 16px 12px 18px !important; } }
+      .vff-ad-slot { display: block; width: 100%; max-width: 970px; margin: 2px auto; text-align: center; position: relative; overflow: hidden; box-sizing: border-box; }
+      .vff-ad-slot:empty { display: none !important; min-height: 0; margin: 0; }
+      #vffAdTop { margin-top: 2px; margin-bottom: 2px; }
+      #vffAdBottom { margin-top: 8px; margin-bottom: 16px; }
+      .wb-studio-main-container { padding-top: 36px !important; padding-bottom: 40px !important; max-width: 1680px !important; width: 98% !important; margin: 0 auto; background: transparent; }
+      @media(max-width:1024px){ .wb-studio-main-container { padding-top: 28px !important; padding-bottom: 32px !important; } }
+      @media(max-width:768px){ .wb-studio-main-container { width: 100% !important; padding-top: 20px !important; padding-bottom: 24px !important; padding-left: 8px !important; padding-right: 8px !important; } }
+      .wb-app-wrapper { margin: 0 auto 32px; border-radius: 18px; border: 1px solid rgba(15, 23, 42, 0.18); box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04), 0 8px 30px -4px rgba(15, 23, 42, 0.08); background: #ffffff; }
+      [data-theme="dark"] .wb-app-wrapper { background: #0f172a; border-color: rgba(255, 255, 255, 0.12); }
+      .wb-canvas-container { width: calc(100% - 24px); height: calc(100% - 24px); margin: 12px; border-radius: 14px; border: 2px solid #334155; box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08), 0 8px 24px -4px rgba(15, 23, 42, 0.12); }
+      [data-theme="dark"] .wb-canvas-container { border: 2px solid #475569; }
+      @media(max-width:768px){ .wb-app-wrapper { margin: 0 auto 16px; border-radius: 12px; } .wb-canvas-container { width: calc(100% - 12px); height: calc(100% - 12px); margin: 6px; border-radius: 10px; } }
+      #wbPresentBtn { display: inline-flex; align-items: center; gap: 8px; height: 40px; min-height: 40px; padding: 0 16px; border-radius: 10px; background: #2563eb; color: #ffffff !important; font-weight: 700; border: 1px solid #1d4ed8; cursor: pointer; }
+      body.vff-presentation-active { overflow: hidden !important; background: #0f172a !important; }
+      body.vff-presentation-active nav.navbar, body.vff-presentation-active .toolhub-single-nav, body.vff-presentation-active .toolhub-saas-hero, body.vff-presentation-active #vffAdTop, body.vff-presentation-active #vffAdBottom, body.vff-presentation-active .toolhub-seo-section, body.vff-presentation-active .wb-feedback-section, body.vff-presentation-active .wb-final-cta-section, body.vff-presentation-active footer, body.vff-presentation-active .reading-progress-bar { display: none !important; }
+      :fullscreen, ::backdrop { background-color: #0f172a !important; }
+      .wb-app-wrapper:fullscreen, .wb-app-wrapper.presentation-mode { position: fixed !important; top: 0 !important; left: 0 !important; width: 100vw !important; width: 100% !important; height: 100vh !important; height: 100dvh !important; min-height: 100vh !important; min-height: 100dvh !important; max-width: 100vw !important; margin: 0 !important; border: none !important; border-radius: 0 !important; z-index: 999999 !important; background: #0f172a !important; display: flex !important; flex-direction: column !important; box-shadow: none !important; }
+      .wb-app-wrapper.presentation-mode .wb-studio-header, .wb-app-wrapper.presentation-mode .wb-context-bar, .wb-app-wrapper.presentation-mode .wb-lesson-flow-bar, .wb-app-wrapper.presentation-mode .wb-toolbar, .wb-app-wrapper.presentation-mode .vff-ad-rail, .wb-app-wrapper.presentation-mode #wbQuickActionsWrapper { display: none !important; }
+      .wb-presentation-header { height: 42px; min-height: 42px; background: #0f172a; border-bottom: 1px solid #1e293b; display: flex; align-items: center; justify-content: space-between; padding: 0 16px; z-index: 9999999; user-select: none; box-sizing: border-box; }
+      .wb-app-wrapper.presentation-mode .wb-presentation-header { display: flex !important; }
+      .wb-app-wrapper.presentation-mode .wb-workspace-grid { display: flex !important; flex: 1 1 auto !important; width: 100% !important; height: calc(100vh - 42px - 28px) !important; height: calc(100dvh - 42px - 28px) !important; min-height: calc(100vh - 70px) !important; min-height: calc(100dvh - 70px) !important; background: var(--wb-canvas-bg, #ffffff) !important; position: relative !important; overflow: hidden !important; grid-template-columns: none !important; }
+      .wb-app-wrapper.presentation-mode .wb-canvas-container { flex: 1 1 auto !important; width: 100% !important; height: 100% !important; margin: 0 !important; border: none !important; border-radius: 0 !important; background-color: var(--wb-canvas-bg, #ffffff) !important; box-shadow: none !important; }
+      .wb-app-wrapper.presentation-mode #vffAdPresentation { display: flex !important; align-items: center !important; justify-content: center !important; height: 28px !important; min-height: 28px !important; width: 100% !important; background: #0b0f19 !important; border-top: 1px solid #1e293b !important; color: #64748b !important; font-size: 0.68rem !important; font-weight: 700 !important; letter-spacing: 0.6px !important; text-transform: uppercase !important; user-select: none !important; z-index: 100 !important; position: static !important; }
+      #vffAdPresentation { display: none; }
+    </style>
+
+    <!-- Microsoft Clarity (Production Only) -->
+    <script type="text/javascript">
+        if (location.hostname === 'www.victoryfluentforum.com' || location.hostname === 'victoryfluentforum.com') {
+            (function(c,l,a,r,i,t,y){
+                c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+                t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+                y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+            })(window, document, "clarity", "script", "x95ib7y3qo");
+        }
+    </script>
+
+    <!-- Structured Data: WebApplication, BreadcrumbList, FAQPage -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebApplication",
+          "@id": "https://www.victoryfluentforum.com/tools/online-whiteboard#webapp",
+          "name": "Free Online Whiteboard for Teaching",
+          "url": "https://www.victoryfluentforum.com/tools/online-whiteboard",
+          "applicationCategory": "EducationalApplication",
+          "operatingSystem": "All",
+          "browserRequirements": "Requires HTML5 Canvas and JavaScript",
+          "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+          },
+          "description": "Interactive browser whiteboard for teachers and tutors to draw, explain, annotate PDF worksheets, and export lesson boards."
+        },
+        {
+          "@type": "BreadcrumbList",
+          "@id": "https://www.victoryfluentforum.com/tools/online-whiteboard#breadcrumb",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "Home",
+              "item": "https://www.victoryfluentforum.com/"
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": "ToolHub",
+              "item": "https://www.victoryfluentforum.com/tools/"
+            },
+            {
+              "@type": "ListItem",
+              "position": 3,
+              "name": "Free Online Whiteboard for Teaching",
+              "item": "https://www.victoryfluentforum.com/tools/online-whiteboard"
+            }
+          ]
+        },
+        {
+          "@type": "FAQPage",
+          "@id": "https://www.victoryfluentforum.com/tools/online-whiteboard#faq",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "Is this online whiteboard completely free to use?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes, this online whiteboard is 100% free for teachers, tutors, students, and educators without any hidden fees or subscriptions."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Do I need to create an account or log in?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "No registration or account creation is required. You can launch the whiteboard and start teaching immediately."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Can I annotate PDF worksheets and question papers?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes, you can upload any PDF file directly in your browser and annotate, highlight, or draw over the worksheet pages."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Are my uploaded PDFs or images uploaded to a server?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "No. All documents, images, and drawings are processed strictly inside your local browser. No files are uploaded to VFF servers."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Does the whiteboard support touchscreen devices and stylus pens?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes, the whiteboard supports touch input and stylus devices (such as iPad Apple Pencil, Samsung S-Pen, and Surface Pen) with pressure-sensitive strokes."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "How do I print or save my completed whiteboard?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "You can click 'Export PNG' to download a image of your board, or click 'Print / Save as PDF' to open your browser's print dialog."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Can I use this whiteboard for online Zoom or Google Meet classes?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes, simply share your screen or browser window during a Zoom, Google Meet, or Microsoft Teams lesson."
+              }
+            }
+          ]
+        }
+      ]
+    }
+    </script>
+</head>
+<body class="toolhub-body">
+    <!-- Reading Progress Bar -->
+    <div id="readingProgress" class="reading-progress-bar"></div>
+
+    <!-- Sticky VFF Navigation Bar -->
+    <nav class="navbar toolhub-single-nav">
+        <div class="toolhub-container nav-container" style="display: flex; justify-content: space-between; align-items: center;">
+            <a href="/" class="logo">
+                <div class="logo-badge">
+                    <img src="./assets/logo.jpg" alt="Victory Fluent Forum Logo" class="site-logo" width="500" height="130" loading="eager">
+                </div>
+            </a>
+            <div class="menu-toggle" id="mobile-menu">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="/" class="nav-link">Home</a></li>
+                <li><a href="/programs" class="nav-link">Programs</a></li>
+                <li><a href="/tools/" class="nav-link active">ToolHub</a></li>
+                <li><a href="/blog" class="nav-link">Blog</a></li>
+                <li><a href="/video-library" class="nav-link">Videos</a></li>
+                <li><a href="/resources" class="nav-link">Resources</a></li>
+                <li class="theme-toggle-item">
+                    <button class="theme-toggle" id="themeToggle" onclick="ToolHub.Theme.toggle()" aria-label="Toggle theme">
+                        <i class="fas fa-sun theme-icon-light"></i>
+                        <i class="fas fa-moon theme-icon-dark"></i>
+                    </button>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- App Hero Header: Professional Teacher-First Hero Section (Phase 2A) -->
+    <header class="toolhub-saas-hero wb-hero-section wb-hero">
+        <div class="toolhub-container">
+            <nav aria-label="Breadcrumb" class="wb-hero-breadcrumb">
+                <span>
+                    <a href="/" style="color: var(--th-primary);">Home</a> &gt; 
+                    <a href="/tools/" style="color: var(--th-primary);">ToolHub</a> &gt; 
+                    <span>Free Online Whiteboard for Teaching</span>
+                </span>
+            </nav>
+
+            <div class="wb-hero-grid">
+                <!-- Left: Core Educational Value Proposition & CTAs -->
+                <div class="wb-hero-content">
+                    <div class="wb-hero-badge">
+                        <span class="wb-badge-pulse"></span>
+                        <i class="fas fa-chalkboard-teacher"></i>
+                        <span>VFF TEACHING STUDIO</span>
+                        <span class="wb-badge-version">v2.5</span>
+                    </div>
+
+                    <h1 class="wb-hero-title">One Teaching Studio. <span class="wb-hero-gradient">Many Ways to Teach.</span></h1>
+                    
+                    <p class="wb-hero-sub">Draw, explain, annotate PDFs, teach Maths, Science, English and Public Speaking — all in one lightweight online teaching board.</p>
+
+                    <!-- Compact Multimodal Feature Chips -->
+                    <div class="wb-hero-chips" aria-label="Teaching Studio Capabilities">
+                        <button type="button" class="wb-hero-chip" data-subject="general" title="Upload & annotate multi-page PDF worksheets without erasing document pixels">
+                            <i class="fas fa-file-pdf"></i> PDF Annotation
+                        </button>
+                        <button type="button" class="wb-hero-chip" data-subject="math" title="Math grids, coordinate axes, geometry shapes & measurement ruler">
+                            <i class="fas fa-square-root-alt"></i> Math Tools
+                        </button>
+                        <button type="button" class="wb-hero-chip" data-subject="science" title="Observation tables, diagram arrows & experiment labels">
+                            <i class="fas fa-flask"></i> Science Tools
+                        </button>
+                        <button type="button" class="wb-hero-chip" data-subject="english" title="Direct-on-canvas typing, sentence diagramming & grammar cards">
+                            <i class="fas fa-font"></i> English Tools
+                        </button>
+                        <button type="button" class="wb-hero-chip" data-subject="speech" title="3-zone outline, speech cue cards & pacing timers">
+                            <i class="fas fa-microphone-alt"></i> Public Speaking
+                        </button>
+                        <button type="button" class="wb-hero-chip" data-action="presentation" title="Distraction-free fullscreen presentation mode">
+                            <i class="fas fa-tv"></i> Presentation Mode
+                        </button>
+                    </div>
+
+                    <!-- Primary & Secondary Quick Access CTAs -->
+                    <div class="wb-hero-actions">
+                        <a href="#whiteboardApp" class="wb-hero-btn-primary" id="wbHeroStartTeachingBtn" aria-label="Jump directly to working whiteboard">
+                            <i class="fas fa-pen-nib"></i> Start Teaching <i class="fas fa-arrow-down wb-btn-arrow"></i>
+                        </a>
+                        <button type="button" class="wb-hero-btn-secondary" id="wbHeroExploreToolsBtn" title="Explore Subject Toolkits">
+                            <i class="fas fa-layer-group"></i> Explore Toolkits
+                        </button>
+                        <span class="wb-hero-reassurance">
+                            <i class="fas fa-shield-alt"></i> 100% Free • No Login Required
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Right: Compact Visual Digital Teaching Board Preview Card -->
+                <div class="wb-hero-visual" aria-hidden="true">
+                    <div class="wb-preview-slate-card">
+                        <!-- Mini Slate Top Header -->
+                        <div class="wb-preview-header">
+                            <div class="wb-preview-swatches">
+                                <span class="wb-preview-dot dot-green" title="Green Chalkboard"></span>
+                                <span class="wb-preview-dot dot-slate" title="Slate Blackboard"></span>
+                                <span class="wb-preview-dot dot-cream" title="Warm Cream"></span>
+                                <span class="wb-preview-dot dot-white" title="Whiteboard"></span>
+                            </div>
+                            <span class="wb-preview-tag"><i class="fas fa-chalkboard"></i> Classroom Canvas</span>
+                        </div>
+
+                        <!-- Mini Board Canvas Demo Body -->
+                        <div class="wb-preview-canvas">
+                            <!-- Mini Worksheet Underlay Card -->
+                            <div class="wb-preview-worksheet">
+                                <div class="wb-worksheet-title"><i class="fas fa-file-pdf"></i> Worksheet.pdf (Underlay)</div>
+                                <div class="wb-worksheet-axis">
+                                    <span class="axis-y">y</span>
+                                    <div class="axis-grid">
+                                        <svg class="axis-curve" viewBox="0 0 120 40">
+                                            <path d="M 5 35 Q 60 5 115 15" fill="none" stroke="#2563eb" stroke-width="2.5" />
+                                        </svg>
+                                    </div>
+                                    <span class="axis-x">x</span>
+                                </div>
+                            </div>
+
+                            <!-- Teaching Arrow & Annotation Overlay -->
+                            <div class="wb-preview-annotation">
+                                <div class="wb-annotation-callout">
+                                    <i class="fas fa-level-up-alt fa-rotate-90"></i>
+                                    <span>Key Concept: <strong>Slope &gt; 0</strong></span>
+                                </div>
+                            </div>
+
+                            <!-- Mini Sticky Cue Note -->
+                            <div class="wb-preview-sticky">
+                                <div class="wb-sticky-header"><i class="fas fa-lightbulb"></i> Lesson Focus</div>
+                                <div>Hook &rarr; Explain &rarr; Practice</div>
+                            </div>
+                        </div>
+
+                        <!-- Mini Slate Footer Pill Badges -->
+                        <div class="wb-preview-footer">
+                            <span class="wb-preview-pill"><i class="fas fa-pen-fancy"></i> Stylus Palm Rejection</span>
+                            <span class="wb-preview-pill"><i class="fas fa-adjust"></i> Chalkboard PDF</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- TOP AD INVENTORY SLOT (STRUCTURAL PLACEHOLDER FOR FUTURE REVENUE) -->
+    <div id="vffAdTop" class="vff-ad-slot" aria-label="Advertisement"></div>
+
+    <!-- MAIN PRODUCT EXPERIENCE: HERO INTERACTIVE WHITEBOARD TOOL -->
+    <main class="toolhub-container wb-studio-main-container">
+        
+        <div class="wb-app-wrapper" id="whiteboardApp">
+            
+            <!-- Compact Professional Presentation Header (Active in Fullscreen/Presentation Mode) -->
+            <header id="wbPresHeader" class="wb-presentation-header" style="display: none;">
+                <div class="wb-pres-left">
+                    <span class="wb-pres-brand"><i class="fas fa-chalkboard-teacher"></i> <span>VFF Teaching Studio</span></span>
+                    <span class="wb-pres-divider">|</span>
+                    <span id="wbPresDocTitle" class="wb-pres-material">Blank Whiteboard</span>
+                </div>
+
+                <div class="wb-pres-center">
+                    <!-- PDF Page Navigation (Visible when PDF is loaded) -->
+                    <div id="wbPresPdfNav" class="wb-pres-pdf-nav" style="display: none;">
+                        <button type="button" id="wbPresPdfPrev" class="wb-pres-btn wb-pres-icon-btn" title="Previous Page (← / PageUp)"><i class="fas fa-chevron-left"></i></button>
+                        <span id="wbPresPdfPageNum" class="wb-pres-page-badge">Page 1 / 1</span>
+                        <button type="button" id="wbPresPdfNext" class="wb-pres-btn wb-pres-icon-btn" title="Next Page (→ / PageDown)"><i class="fas fa-chevron-right"></i></button>
+                        <button type="button" id="wbPresPdfChalkboardBtn" class="wb-pres-btn wb-pres-icon-btn wb-pdf-chalkboard-toggle" title="Chalkboard PDF Mode (Invert Colors for Dark Canvas)"><i class="fas fa-adjust"></i></button>
+                    </div>
+                </div>
+
+                <div class="wb-pres-right">
+                    <!-- Quick Actions Popover Trigger & Menu -->
+                    <div class="wb-pres-dropdown-wrap" id="wbPresQuickActionsWrap">
+                        <button type="button" id="wbPresQuickActionsBtn" class="wb-pres-btn" title="Quick Actions (Undo, Redo, Zoom, Export, Print, Clear)">
+                            <i class="fas fa-bolt" style="color: #f59e0b;"></i> <span class="wb-pres-btn-text">Quick Actions</span> <i class="fas fa-chevron-down wb-pres-chevron"></i>
+                        </button>
+                        <div id="wbPresQuickActionsMenu" class="wb-pres-popover" style="display: none;">
+                            <div class="wb-pres-popover-title">VIEW &amp; NAVIGATION</div>
+                            <button type="button" class="wb-pres-popover-item" id="wbPresQaZoomIn">
+                                <i class="fas fa-search-plus" style="color: #38bdf8;"></i> <span>Zoom In</span>
+                            </button>
+                            <button type="button" class="wb-pres-popover-item" id="wbPresQaZoomOut">
+                                <i class="fas fa-search-minus" style="color: #38bdf8;"></i> <span>Zoom Out</span>
+                            </button>
+                            <button type="button" class="wb-pres-popover-item" id="wbPresQaZoomReset">
+                                <i class="fas fa-compress-arrows-alt" style="color: #38bdf8;"></i> <span>Reset View (100%)</span>
+                            </button>
+                            <div class="wb-pres-popover-divider"></div>
+                            <div class="wb-pres-popover-title">TEACHING ACTIONS</div>
+                            <button type="button" class="wb-pres-popover-item" id="wbPresQaUndo">
+                                <i class="fas fa-undo" style="color: #60a5fa;"></i> <span>Undo (Ctrl+Z)</span>
+                            </button>
+                            <button type="button" class="wb-pres-popover-item" id="wbPresQaRedo">
+                                <i class="fas fa-redo" style="color: #60a5fa;"></i> <span>Redo (Ctrl+Y)</span>
+                            </button>
+                            <div class="wb-pres-popover-divider"></div>
+                            <div class="wb-pres-popover-title">EXPORTS &amp; MANAGEMENT</div>
+                            <button type="button" class="wb-pres-popover-item" id="wbPresQaExport">
+                                <i class="fas fa-download" style="color: #34d399;"></i> <span>Export PNG Image</span>
+                            </button>
+                            <button type="button" class="wb-pres-popover-item" id="wbPresQaPrint">
+                                <i class="fas fa-print" style="color: #a78bfa;"></i> <span>Print / Save as PDF</span>
+                            </button>
+                            <div class="wb-pres-popover-divider"></div>
+                            <button type="button" class="wb-pres-popover-item" id="wbPresQaPrivacy">
+                                <i class="fas fa-shield-alt" style="color: #38bdf8;"></i> <span>Privacy &amp; Data Settings</span>
+                            </button>
+                            <div class="wb-pres-popover-divider"></div>
+                            <button type="button" class="wb-pres-popover-item danger" id="wbPresQaClear">
+                                <i class="fas fa-trash-alt" style="color: #f87171;"></i> <span>Clear Whiteboard</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Worksheet PDF Trigger -->
+                    <button type="button" id="wbPresPdfUploadBtn" class="wb-pres-btn" title="Annotate Student Worksheet or Lesson PDF">
+                        <i class="fas fa-file-pdf" style="color: #ef4444;"></i> <span class="wb-pres-btn-text">Worksheet PDF</span>
+                    </button>
+
+                    <!-- Diagram / Image Trigger -->
+                    <button type="button" id="wbPresImgUploadBtn" class="wb-pres-btn" title="Insert Educational Diagram or Image">
+                        <i class="fas fa-image" style="color: #10b981;"></i> <span class="wb-pres-btn-text">Diagram</span>
+                    </button>
+
+                    <!-- Background Surface Selector Popover -->
+                    <div class="wb-pres-dropdown-wrap" id="wbPresBgWrap">
+                        <button type="button" id="wbPresBgBtn" class="wb-pres-btn" title="Change Background Surface">
+                            <i class="fas fa-layer-group" style="color: #38bdf8;"></i> <span class="wb-pres-btn-text">Background</span> <i class="fas fa-chevron-down wb-pres-chevron"></i>
+                        </button>
+                        <div id="wbPresBgMenu" class="wb-pres-popover" style="display: none;">
+                            <div class="wb-pres-popover-title">CLASSROOM SURFACES</div>
+                            <button type="button" class="wb-pres-popover-item wb-pres-surface-item" data-pres-surface="chalkboard" data-surface="chalkboard">
+                                <i class="fas fa-circle" style="color: #133827;"></i> <span>Green Chalkboard</span>
+                            </button>
+                            <button type="button" class="wb-pres-popover-item wb-pres-surface-item" data-pres-surface="blackboard" data-surface="blackboard">
+                                <i class="fas fa-circle" style="color: #18181b;"></i> <span>Slate Blackboard</span>
+                            </button>
+                            <button type="button" class="wb-pres-popover-item wb-pres-surface-item" data-pres-surface="cream" data-surface="cream">
+                                <i class="fas fa-circle" style="color: #fdfbf7; border: 1px solid #94a3b8; border-radius: 50%;"></i> <span>Warm Cream Paper</span>
+                            </button>
+                            <button type="button" class="wb-pres-popover-item wb-pres-surface-item active" data-pres-surface="white" data-surface="white">
+                                <i class="fas fa-circle" style="color: #ffffff; border: 1px solid #cbd5e1; border-radius: 50%;"></i> <span>Clean Whiteboard</span>
+                            </button>
+                            <div class="wb-pres-popover-divider"></div>
+                            <div class="wb-pres-popover-title">CANVAS PATTERN</div>
+                            <button type="button" class="wb-pres-popover-item active" data-pres-bg="dots">
+                                <i class="fas fa-braille" style="color: #94a3b8;"></i> <span>Dot Grid</span>
+                            </button>
+                            <button type="button" class="wb-pres-popover-item" data-pres-bg="math">
+                                <i class="fas fa-border-all" style="color: #60a5fa;"></i> <span>Math Grid (24px)</span>
+                            </button>
+                            <button type="button" class="wb-pres-popover-item" data-pres-bg="graph">
+                                <i class="fas fa-th" style="color: #38bdf8;"></i> <span>Fine Graph Paper</span>
+                            </button>
+                            <button type="button" class="wb-pres-popover-item" data-pres-bg="coord">
+                                <i class="fas fa-arrows-alt" style="color: #818cf8;"></i> <span>Coordinate Plane (X-Y)</span>
+                            </button>
+                            <button type="button" class="wb-pres-popover-item" data-pres-bg="numline">
+                                <i class="fas fa-ruler-horizontal" style="color: #f59e0b;"></i> <span>Number Line (-10 to +10)</span>
+                            </button>
+                            <button type="button" class="wb-pres-popover-item" data-pres-bg="lines">
+                                <i class="fas fa-align-justify" style="color: #a78bfa;"></i> <span>Ruled Writing Lines</span>
+                            </button>
+                            <button type="button" class="wb-pres-popover-item" data-pres-bg="table">
+                                <i class="fas fa-table" style="color: #34d399;"></i> <span>Observation Table</span>
+                            </button>
+                            <button type="button" class="wb-pres-popover-item" data-pres-bg="speech">
+                                <i class="fas fa-columns" style="color: #fb923c;"></i> <span>Speech Outline</span>
+                            </button>
+                            <button type="button" class="wb-pres-popover-item" data-pres-bg="blank">
+                                <i class="far fa-file" style="color: #e2e8f0;"></i> <span>Blank White</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Assets Drawer Trigger -->
+                    <button type="button" id="wbPresHeaderAssetsBtn" class="wb-pres-btn wb-pres-btn-assets" title="Teaching Assets Drawer (Stamps, Infographics, Templates, Blocks)">
+                        <i class="fas fa-shapes"></i> <span class="wb-pres-btn-text">Assets</span>
+                    </button>
+
+                    <!-- Tools Panel Trigger -->
+                    <button type="button" id="wbPresHeaderToolsBtn" class="wb-pres-btn wb-pres-btn-tools" title="Toggle Teaching Tools Panel">
+                        <i class="fas fa-pen-nib"></i> <span class="wb-pres-btn-text">Tools</span>
+                    </button>
+
+                    <!-- Presentation Mode Recording Control -->
+                    <button type="button" id="wbPresRecordBtn" class="wb-pres-btn wb-pres-btn-record" title="Record teaching session locally" aria-label="Start local lesson recording">
+                        <span class="wb-record-dot" aria-hidden="true"></span> <span id="wbPresRecordBtnText" class="wb-pres-btn-text">Record</span>
+                    </button>
+                    <div id="wbPresRecordingIndicator" class="wb-recording-indicator wb-pres-rec-indicator" style="display: none;" aria-live="polite">
+                        <span class="wb-rec-pulse" aria-hidden="true"></span>
+                        <span id="wbPresRecordingTimer" class="wb-rec-timer">00:00</span>
+                    </div>
+
+                    <!-- Exit Presentation -->
+                    <button type="button" id="wbPresExitBtn" class="wb-pres-btn wb-pres-btn-exit" title="Exit Presentation Mode (Esc)">
+                        <i class="fas fa-compress"></i> <span class="wb-pres-btn-text">Exit</span>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Teaching Studio Application Header -->
+            <header class="wb-studio-header">
+                <div class="wb-studio-brand">
+                    <div class="wb-brand-badge">
+                        <span class="wb-badge-pulse" aria-hidden="true"></span>
+                        <i class="fas fa-graduation-cap"></i>
+                        <span>Teaching Studio</span>
+                        <span class="wb-badge-version">v2.5</span>
+                    </div>
+                    
+                    <!-- Premium Custom Subject Switcher -->
+                    <div class="wb-subject-switcher-wrapper" id="wbSubjectSwitcherWrapper">
+                        <button type="button" class="wb-subject-switcher-trigger" id="wbSubjectSwitcherBtn" aria-haspopup="true" aria-expanded="false" title="Select Teaching Subject Mode">
+                            <span class="wb-subject-current-icon" id="wbSubjectCurrentIcon"><i class="fas fa-chalkboard-teacher"></i></span>
+                            <div class="wb-subject-current-text">
+                                <span class="wb-subject-current-label" id="wbSubjectCurrentLabel">General Teaching</span>
+                                <span class="wb-subject-current-sub" id="wbSubjectCurrentSub">Universal lesson studio</span>
+                            </div>
+                            <i class="fas fa-chevron-down wb-subject-chevron"></i>
+                        </button>
+                        
+                        <div class="wb-subject-dropdown-menu" id="wbSubjectDropdownMenu" style="display: none;">
+                            <div class="wb-subj-dropdown-header">SUBJECT WORKFLOW</div>
+                            <button type="button" class="wb-subject-option active" data-subject="general" onclick="VFFWhiteboard.setSubjectMode('general'); VFFWhiteboard.toggleSubjectDropdown(false);">
+                                <span class="wb-subj-icon" style="background: rgba(37,99,235,0.12); color: #2563eb;"><i class="fas fa-chalkboard-teacher"></i></span>
+                                <div class="wb-subj-details">
+                                    <span class="wb-subj-name">General Teaching</span>
+                                    <span class="wb-subj-desc">Universal classroom whiteboard & lesson tools</span>
+                                </div>
+                                <i class="fas fa-check wb-subj-check"></i>
+                            </button>
+                            <button type="button" class="wb-subject-option" data-subject="math" onclick="VFFWhiteboard.setSubjectMode('math'); VFFWhiteboard.toggleSubjectDropdown(false);">
+                                <span class="wb-subj-icon" style="background: rgba(16,185,129,0.12); color: #10b981;"><i class="fas fa-square-root-alt"></i></span>
+                                <div class="wb-subj-details">
+                                    <span class="wb-subj-name">Mathematics</span>
+                                    <span class="wb-subj-desc">Numbers, geometry & problem solving</span>
+                                </div>
+                                <i class="fas fa-check wb-subj-check"></i>
+                            </button>
+                            <button type="button" class="wb-subject-option" data-subject="science" onclick="VFFWhiteboard.setSubjectMode('science'); VFFWhiteboard.toggleSubjectDropdown(false);">
+                                <span class="wb-subj-icon" style="background: rgba(14,165,233,0.12); color: #0ea5e9;"><i class="fas fa-flask"></i></span>
+                                <div class="wb-subj-details">
+                                    <span class="wb-subj-name">Science Studio</span>
+                                    <span class="wb-subj-desc">Diagrams, observations & scientific concepts</span>
+                                </div>
+                                <i class="fas fa-check wb-subj-check"></i>
+                            </button>
+                            <button type="button" class="wb-subject-option" data-subject="english" onclick="VFFWhiteboard.setSubjectMode('english'); VFFWhiteboard.toggleSubjectDropdown(false);">
+                                <span class="wb-subj-icon" style="background: rgba(99,102,241,0.12); color: #6366f1;"><i class="fas fa-book-open"></i></span>
+                                <div class="wb-subj-details">
+                                    <span class="wb-subj-name">English & Grammar</span>
+                                    <span class="wb-subj-desc">Writing, grammar, vocab & comprehension</span>
+                                </div>
+                                <i class="fas fa-check wb-subj-check"></i>
+                            </button>
+                            <button type="button" class="wb-subject-option" data-subject="speech" onclick="VFFWhiteboard.setSubjectMode('speech'); VFFWhiteboard.toggleSubjectDropdown(false);">
+                                <span class="wb-subj-icon" style="background: rgba(245,158,11,0.12); color: #f59e0b;"><i class="fas fa-microphone-alt"></i></span>
+                                <div class="wb-subj-details">
+                                    <span class="wb-subj-name">Public Speaking & Debate</span>
+                                    <span class="wb-subj-desc">Speech structure, arguments, cue cards & flow</span>
+                                </div>
+                                <i class="fas fa-check wb-subj-check"></i>
+                            </button>
+                        </div>
+                        
+                        <!-- Preserved select element for programmatic and test compatibility -->
+                        <select id="wbSubjectSelect" class="wb-subject-select-hidden" style="display: none;" aria-hidden="true">
+                            <option value="general" selected>General Teaching</option>
+                            <option value="math">Mathematics Mode</option>
+                            <option value="science">Science Studio</option>
+                            <option value="english">English & Grammar</option>
+                            <option value="speech">Public Speaking & Debate</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Center: Lesson Document Status -->
+                <div class="wb-studio-center">
+                    <div class="wb-doc-pill" title="Current Teaching Material">
+                        <span id="wbDocTitle" class="wb-doc-title">Blank Board</span>
+                        <span id="wbHeaderPageStatus" class="wb-header-badge">READY</span>
+                    </div>
+                </div>
+
+                <!-- Right: Action Hierarchy (Materials, Assets, Present, Exports) -->
+                <div class="wb-studio-actions">
+                    <!-- Material Ingestion Controls -->
+                    <div class="wb-action-cluster">
+                        <label class="wb-btn wb-btn-import" title="Annotate student worksheet or lesson PDF">
+                            <i class="fas fa-file-pdf" style="color: #ef4444;"></i> <span>Worksheet PDF</span>
+                            <input type="file" id="wbPdfInput" accept=".pdf,application/pdf" style="display: none;">
+                        </label>
+
+                        <label class="wb-btn wb-btn-import" title="Insert educational image or diagram">
+                            <i class="fas fa-image" style="color: #10b981;"></i> <span>Diagram</span>
+                            <input type="file" id="wbImgInput" accept="image/*" style="display: none;">
+                        </label>
+                    </div>
+
+                    <!-- Secondary Teaching Tools -->
+                    <div class="wb-action-cluster">
+                        <button type="button" id="wbHeaderAssetsBtn" class="wb-btn wb-btn-secondary" onclick="VFFWhiteboard.toggleAssetsDrawer()" title="Open Teaching Assets, Infographics & Templates">
+                            <i class="fas fa-shapes" style="color: #3b82f6;"></i> <span>Assets</span>
+                        </button>
+
+                        <div class="wb-dropdown-wrapper" id="wbQuickActionsWrapper" style="position: relative;">
+                            <button type="button" id="wbQuickActionsBtn" class="wb-btn wb-btn-secondary" onclick="VFFWhiteboard.toggleQuickActions()" title="Quick Lesson Actions & Interactive Blocks">
+                                <i class="fas fa-bolt" style="color: #f59e0b;"></i> <span>Quick Actions</span> <i class="fas fa-chevron-down" style="font-size: 0.65rem; margin-left: 2px;"></i>
+                            </button>
+                            <div id="wbQuickActionsMenu" class="wb-dropdown-menu" style="display: none;">
+                                <div class="wb-dropdown-group-title">INTERACTIVE LESSON BLOCKS</div>
+                                <button type="button" class="wb-dropdown-item" onclick="VFFWhiteboard.addLessonBlock('reveal'); VFFWhiteboard.toggleQuickActions(false);">
+                                    <i class="fas fa-eye-slash" style="color: #2563eb;"></i>
+                                    <div class="wb-dd-text"><strong>Question + Reveal Card</strong><span>Hidden answer for active recall</span></div>
+                                </button>
+                                <button type="button" class="wb-dropdown-item" onclick="VFFWhiteboard.addLessonBlock('concept'); VFFWhiteboard.toggleQuickActions(false);">
+                                    <i class="fas fa-lightbulb" style="color: #10b981;"></i>
+                                    <div class="wb-dd-text"><strong>Key Concept Card</strong><span>Highlighted core rule or formula</span></div>
+                                </button>
+                                <button type="button" class="wb-dropdown-item" onclick="VFFWhiteboard.addLessonBlock('note', { color: 'yellow' }); VFFWhiteboard.toggleQuickActions(false);">
+                                    <i class="fas fa-sticky-note" style="color: #f59e0b;"></i>
+                                    <div class="wb-dd-text"><strong>Sticky Note (Yellow)</strong><span>Teacher thought or student idea</span></div>
+                                </button>
+                                <button type="button" class="wb-dropdown-item" onclick="VFFWhiteboard.addLessonBlock('task'); VFFWhiteboard.toggleQuickActions(false);">
+                                    <i class="fas fa-tasks" style="color: #8b5cf6;"></i>
+                                    <div class="wb-dd-text"><strong>Student Checklist Task</strong><span>Interactive practice checklist</span></div>
+                                </button>
+                                <button type="button" class="wb-dropdown-item" onclick="VFFWhiteboard.stampSticker('important'); VFFWhiteboard.toggleQuickActions(false);">
+                                    <i class="fas fa-star" style="color: #ef4444;"></i>
+                                    <div class="wb-dd-text"><strong>⭐ Important Stamp</strong><span>Place emphasis stamp on canvas</span></div>
+                                </button>
+                                <div class="wb-dropdown-divider"></div>
+                                <div class="wb-dropdown-group-title">INFOGRAPHICS & DIAGRAMS</div>
+                                <button type="button" class="wb-dropdown-item" onclick="VFFWhiteboard.insertInfographic('process3'); VFFWhiteboard.toggleQuickActions(false);">
+                                    <i class="fas fa-project-diagram" style="color: #0ea5e9;"></i>
+                                    <div class="wb-dd-text"><strong>3-Step Process Flow</strong><span>Linear explanation chain</span></div>
+                                </button>
+                                <button type="button" class="wb-dropdown-item" onclick="VFFWhiteboard.insertInfographic('cycle'); VFFWhiteboard.toggleQuickActions(false);">
+                                    <i class="fas fa-sync-alt" style="color: #10b981;"></i>
+                                    <div class="wb-dd-text"><strong>Cycle Diagram</strong><span>Circular repeating processes</span></div>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- PRIMARY CTA: Classroom Presentation Mode -->
+                    <button type="button" id="wbPresentBtn" class="wb-btn wb-btn-present" title="Enter Distraction-Free Presentation Mode (Fullscreen)" aria-label="Enter Presentation Mode"><i class="fas fa-desktop"></i> <span>Present</span></button>
+                    <button type="button" id="wbExitPresentBtn" class="wb-btn wb-btn-secondary" style="display: none;" title="Exit Presentation Mode (Esc)" aria-label="Exit Presentation Mode"><i class="fas fa-compress"></i> <span>Exit (Esc)</span></button>
+
+                    <!-- Studio Recording Cluster (Local Browser-Native Recording) -->
+                    <div class="wb-action-cluster wb-record-cluster" id="wbRecordCluster">
+                        <button type="button" id="wbRecordBtn" class="wb-btn wb-btn-record" title="Record teaching session locally (No upload to VFF)" aria-label="Start local lesson recording">
+                            <span class="wb-record-dot" aria-hidden="true"></span>
+                            <span id="wbRecordBtnText">Record</span>
+                        </button>
+                        <div id="wbRecordingIndicator" class="wb-recording-indicator" style="display: none;" aria-live="polite">
+                            <span class="wb-rec-pulse" aria-hidden="true"></span>
+                            <span id="wbRecordingTimer" class="wb-rec-timer">00:00</span>
+                        </div>
+                        <label class="wb-mic-toggle" title="Include microphone in recording (Default OFF)">
+                            <input type="checkbox" id="wbRecordMicCheckbox" aria-label="Include microphone audio in recording">
+                            <i class="fas fa-microphone" id="wbMicIcon" aria-hidden="true"></i>
+                            <span class="wb-mic-label">Mic</span>
+                        </label>
+                    </div>
+
+                    <!-- Utility Actions Cluster -->
+                    <div class="wb-utility-cluster">
+                        <button id="wbPrivacyBtn" class="wb-btn-icon" data-tooltip="Privacy &amp; Teaching Data Settings" title="Privacy &amp; Teaching Data Settings" aria-label="Privacy &amp; Teaching Data Settings"><i class="fas fa-shield-alt" style="color: #2563eb;"></i></button>
+                        <button id="wbExportPngBtn" class="wb-btn-icon" data-tooltip="Export PNG — Download image" title="Export as PNG"><i class="fas fa-download"></i></button>
+                        <button id="wbPrintBtn" class="wb-btn-icon" data-tooltip="Print / Save PDF" title="Print notes or save as PDF"><i class="fas fa-print"></i></button>
+                        <button id="wbClearBtn" class="wb-btn-icon wb-btn-danger-ghost" data-tooltip="Clear Canvas" title="Clear whiteboard"><i class="fas fa-trash-alt"></i></button>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Contextual Tool Parameters Bar -->
+            <div class="wb-context-bar">
+                <div class="wb-param-group">
+                    <span class="wb-param-label">Color</span>
+                    <div class="wb-color-swatches">
+                        <div class="wb-swatch active" data-color="#2563eb" style="background: #2563eb;" title="Blue"></div>
+                        <div class="wb-swatch" data-color="#dc2626" style="background: #dc2626;" title="Red"></div>
+                        <div class="wb-swatch" data-color="#16a34a" style="background: #16a34a;" title="Green"></div>
+                        <div class="wb-swatch" data-color="#ca8a04" style="background: #ca8a04;" title="Yellow"></div>
+                        <div class="wb-swatch" data-color="#0f172a" style="background: #0f172a;" title="Dark Slate"></div>
+                        <div class="wb-swatch" data-color="#ffffff" style="background: #ffffff; border: 1px solid #cbd5e1;" title="White"></div>
+                    </div>
+                    <input type="color" id="wbColorPicker" value="#2563eb" title="Choose custom color" style="width: 24px; height: 24px; border: none; background: transparent; cursor: pointer;">
+                </div>
+
+                <div class="wb-param-divider"></div>
+
+                <div class="wb-param-group">
+                    <span class="wb-param-label">Size</span>
+                    <div class="wb-stroke-preview-container">
+                        <div id="wbStrokePreviewDot"></div>
+                        <input type="range" id="wbStrokeWidth" min="2" max="30" value="4" style="width: 72px; cursor: pointer;" title="Adjust stroke thickness">
+                    </div>
+                </div>
+
+                <div class="wb-param-divider"></div>
+
+                <div class="wb-param-group">
+                    <span class="wb-param-label">Surface</span>
+                    <select id="wbSurfaceSelect" class="wb-subject-select" title="Classroom Surface (Green Chalkboard, Slate Blackboard, Warm Cream, Whiteboard)">
+                        <option value="chalkboard">Chalkboard (Green)</option>
+                        <option value="blackboard">Slate Blackboard</option>
+                        <option value="cream">Warm Cream Paper</option>
+                        <option value="white" selected>Clean Whiteboard</option>
+                    </select>
+                </div>
+
+                <div class="wb-param-divider"></div>
+
+                <div class="wb-param-group">
+                    <span class="wb-param-label">Grid</span>
+                    <select id="wbGridSelect" class="wb-subject-select" title="Change background surface pattern">
+                        <option value="dots" selected>Dot Grid</option>
+                        <option value="math">Math Grid (24px)</option>
+                        <option value="graph">Fine Graph Paper</option>
+                        <option value="coord">Coordinate Plane</option>
+                        <option value="numline">Number Line</option>
+                        <option value="lines">Ruled Lines</option>
+                        <option value="table">Observation Table</option>
+                        <option value="speech">Speech Outline</option>
+                        <option value="blank">Blank</option>
+                    </select>
+                </div>
+
+                <div class="wb-param-divider"></div>
+
+                <div class="wb-param-group">
+                    <button type="button" id="wbLineStyleBtn" class="wb-btn-icon wb-context-toggle-btn" title="Toggle Stroke Style (Solid / Dashed)" data-style="solid">
+                        <i class="fas fa-grip-lines"></i>
+                    </button>
+                    <button type="button" id="wbStylusOnlyBtn" class="wb-btn-icon wb-context-toggle-btn" title="Stylus Only: Suppress accidental finger touches / palm rejection (OFF)">
+                        <i class="fas fa-pen-fancy"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Compact 8-Stage Pedagogical Lesson Flow Stepper -->
+            <div id="wbLessonFlowBar" class="wb-lesson-flow-bar" aria-label="Lesson Progression Flow">
+                <div class="wb-flow-label"><i class="fas fa-route" style="color: #2563eb;"></i> Stage:</div>
+                <div class="wb-flow-steps" id="wbFlowSteps">
+                    <button type="button" class="wb-flow-step active" data-stage="1" onclick="VFFWhiteboard.setLessonStage(1)" title="Stage 1: Introduction & Objective"><span class="wb-step-num">1</span> Intro</button>
+                    <span class="wb-flow-arrow">›</span>
+                    <button type="button" class="wb-flow-step" data-stage="2" onclick="VFFWhiteboard.setLessonStage(2)" title="Stage 2: Core Concept Explanation"><span class="wb-step-num">2</span> Explain</button>
+                    <span class="wb-flow-arrow">›</span>
+                    <button type="button" class="wb-flow-step" data-stage="3" onclick="VFFWhiteboard.setLessonStage(3)" title="Stage 3: Guided Model Example"><span class="wb-step-num">3</span> Example</button>
+                    <span class="wb-flow-arrow">›</span>
+                    <button type="button" class="wb-flow-step" data-stage="4" onclick="VFFWhiteboard.setLessonStage(4)" title="Stage 4: Interactive Questioning"><span class="wb-step-num">4</span> Ask</button>
+                    <span class="wb-flow-arrow">›</span>
+                    <button type="button" class="wb-flow-step" data-stage="5" onclick="VFFWhiteboard.setLessonStage(5)" title="Stage 5: Student Reflection / Think Time"><span class="wb-step-num">5</span> Think</button>
+                    <span class="wb-flow-arrow">›</span>
+                    <button type="button" class="wb-flow-step" data-stage="6" onclick="VFFWhiteboard.setLessonStage(6)" title="Stage 6: Reveal & Discuss Answer"><span class="wb-step-num">6</span> Reveal</button>
+                    <span class="wb-flow-arrow">›</span>
+                    <button type="button" class="wb-flow-step" data-stage="7" onclick="VFFWhiteboard.setLessonStage(7)" title="Stage 7: Independent Practice"><span class="wb-step-num">7</span> Practice</button>
+                    <span class="wb-flow-arrow">›</span>
+                    <button type="button" class="wb-flow-step" data-stage="8" onclick="VFFWhiteboard.setLessonStage(8)" title="Stage 8: Lesson Recap & Homework"><span class="wb-step-num">8</span> Recap</button>
+                </div>
+                <div class="wb-flow-nav">
+                    <button type="button" id="wbFlowPrevBtn" class="wb-flow-btn" onclick="VFFWhiteboard.prevLessonStage()" title="Previous Lesson Stage (←)"><i class="fas fa-chevron-left"></i></button>
+                    <button type="button" id="wbFlowNextBtn" class="wb-flow-btn" onclick="VFFWhiteboard.nextLessonStage()" title="Next Lesson Stage (→)"><i class="fas fa-chevron-right"></i></button>
+                </div>
+            </div>
+
+            <!-- Main Interactive Teaching Workspace Grid (Desktop Proportions: Left 68px, Center 1fr, Right 170px) -->
+            <div class="wb-workspace-grid">
+                
+                <!-- Left-Side Collapsible Vertical Toolbar -->
+                <aside class="wb-toolbar" aria-label="Whiteboard Drawing Tools">
+                    <button id="wbToggleToolbarBtn" class="wb-toolbar-toggle" data-tooltip="Hide Tools" title="Hide Tools (←)">
+                        <i class="fas fa-chevron-left" id="wbToggleToolbarIcon"></i>
+                    </button>
+
+                    <!-- GROUP 1: TEACH & SELECT -->
+                    <span class="wb-tool-group-label">Teach</span>
+
+                    <button class="wb-tool-btn" data-tool="select" id="wbToolSelect" data-tooltip="Select (V)" title="Select Teaching Object (V)">
+                        <i class="fas fa-mouse-pointer"></i>
+                    </button>
+
+                    <button class="wb-tool-btn active" data-tool="pen" id="wbToolPen" data-tooltip="Pen (P / B)" title="Pen (P / B)">
+                        <i class="fas fa-pen"></i>
+                    </button>
+
+                    <button class="wb-tool-btn" data-tool="highlighter" id="wbToolHighlighter" data-tooltip="Highlighter (H)" title="Highlighter (H)">
+                        <i class="fas fa-highlighter"></i>
+                    </button>
+
+                    <button class="wb-tool-btn" data-tool="eraser" id="wbToolEraser" data-tooltip="Safe Eraser (E)" title="Safe Ink Eraser (E)">
+                        <i class="fas fa-eraser"></i>
+                    </button>
+
+                    <div class="wb-tool-divider"></div>
+
+                    <!-- GROUP 2: EXPLAIN & CREATE -->
+                    <span class="wb-tool-group-label">Create</span>
+
+                    <button class="wb-tool-btn" data-tool="text" id="wbToolText" data-tooltip="Text (T)" title="Direct Canvas Text (T)">
+                        <i class="fas fa-font"></i>
+                    </button>
+
+                    <button type="button" class="wb-tool-btn wb-popover-trigger" id="wbShapesBtn" onclick="VFFWhiteboard.toggleShapesPopover()" data-tooltip="Shapes &amp; Geometry" title="Shapes &amp; Geometry Palette">
+                        <i class="fas fa-shapes"></i>
+                        <span class="wb-tool-caret">▾</span>
+                    </button>
+
+                    <button type="button" class="wb-tool-btn wb-popover-trigger" id="wbMathBtn" onclick="VFFWhiteboard.toggleMathPopover()" data-tooltip="Maths Toolkit" title="Mathematics Teaching Toolkit">
+                        <i class="fas fa-square-root-alt"></i>
+                        <span class="wb-tool-caret">▾</span>
+                    </button>
+
+                    <button class="wb-tool-btn" data-tool="ruler" id="wbToolRuler" data-tooltip="Ruler (M)" title="Measurement Ruler (M)">
+                        <i class="fas fa-ruler"></i>
+                    </button>
+
+                    <div class="wb-tool-divider"></div>
+
+                    <!-- GROUP 3: ASSETS & SUBJECTS -->
+                    <span class="wb-tool-group-label">Toolkit</span>
+
+                    <button type="button" class="wb-tool-btn wb-drawer-trigger-btn" onclick="VFFWhiteboard.toggleSubjectDrawer()" data-tooltip="Subject Tools" title="Subject Teaching Toolkit (Math, Science, English, Speech)">
+                        <i class="fas fa-layer-group"></i>
+                    </button>
+
+                    <button type="button" id="wbToolbarAssetsBtn" class="wb-tool-btn wb-drawer-trigger-btn" onclick="VFFWhiteboard.toggleAssetsDrawer()" data-tooltip="Teaching Assets" title="Teaching Assets (Annotations, Infographics, Templates, Blocks)">
+                        <i class="fas fa-cube" style="color: #2563eb;"></i>
+                    </button>
+
+                    <div class="wb-tool-divider"></div>
+
+                    <!-- GROUP 4: HISTORY -->
+                    <span class="wb-tool-group-label">History</span>
+
+                    <button id="wbUndoBtn" class="wb-tool-btn" data-tooltip="Undo (Ctrl+Z)" title="Undo (Ctrl+Z)" disabled>
+                        <i class="fas fa-undo"></i>
+                    </button>
+
+                    <button id="wbRedoBtn" class="wb-tool-btn" data-tooltip="Redo (Ctrl+Y)" title="Redo (Ctrl+Y)" disabled>
+                        <i class="fas fa-redo"></i>
+                    </button>
+                </aside>
+
+                <!-- Subject Tools Drawer Popover -->
+                <div id="wbSubjectDrawer" class="wb-subject-drawer" style="display: none;"></div>
+
+                <!-- Categorized Shapes Popover Panel -->
+                <div id="wbShapesPopover" class="wb-popover-drawer" style="display: none;">
+                    <div class="wb-popover-header">
+                        <div class="wb-popover-title"><i class="fas fa-shapes" style="color: #2563eb;"></i> Shapes &amp; Geometry</div>
+                        <button type="button" class="wb-drawer-close-btn" onclick="VFFWhiteboard.toggleShapesPopover(false)" title="Close (Esc)">✕</button>
+                    </div>
+                    <div class="wb-popover-body">
+                        <div class="wb-popover-category">BASIC SHAPES</div>
+                        <div class="wb-shape-grid">
+                            <button type="button" class="wb-shape-btn" data-shape="line" title="Straight Line (L)"><i class="fas fa-minus"></i><span>Line</span></button>
+                            <button type="button" class="wb-shape-btn" data-shape="arrow" title="Arrow Callout (A)"><i class="fas fa-long-arrow-alt-right"></i><span>Arrow</span></button>
+                            <button type="button" class="wb-shape-btn" data-shape="double_arrow" title="Double Arrow"><i class="fas fa-arrows-alt-h"></i><span>Double Arrow</span></button>
+                            <button type="button" class="wb-shape-btn" data-shape="rectangle" title="Rectangle (R)"><i class="far fa-square"></i><span>Rectangle</span></button>
+                            <button type="button" class="wb-shape-btn" data-shape="square" title="Square (1:1)"><i class="fas fa-square"></i><span>Square</span></button>
+                            <button type="button" class="wb-shape-btn" data-shape="circle" title="Circle (C)"><i class="far fa-circle"></i><span>Circle</span></button>
+                            <button type="button" class="wb-shape-btn" data-shape="curved_arrow" title="Curved Arrow"><i class="fas fa-redo"></i><span>Curved</span></button>
+                            <button type="button" class="wb-shape-btn" data-shape="callout" title="Speech Bubble"><i class="fas fa-comment-alt"></i><span>Callout</span></button>
+                        </div>
+                        <div class="wb-popover-category">GEOMETRY &amp; POLYGONS</div>
+                        <div class="wb-shape-grid">
+                            <button type="button" class="wb-shape-btn" data-shape="triangle" title="Equilateral Triangle"><i class="fas fa-play" style="transform: rotate(-90deg);"></i><span>Triangle</span></button>
+                            <button type="button" class="wb-shape-btn" data-shape="right_triangle" title="Right Triangle (90°)"><i class="fas fa-caret-up" style="transform: skewX(-20deg);"></i><span>Right △</span></button>
+                            <button type="button" class="wb-shape-btn" data-shape="parallelogram" title="Parallelogram"><i class="fas fa-square" style="transform: skewX(-24deg);"></i><span>Parallel.</span></button>
+                            <button type="button" class="wb-shape-btn" data-shape="rhombus" title="Rhombus / Diamond"><i class="fas fa-diamond"></i><span>Rhombus</span></button>
+                            <button type="button" class="wb-shape-btn" data-shape="trapezoid" title="Trapezoid"><i class="fas fa-vector-square"></i><span>Trapezoid</span></button>
+                            <button type="button" class="wb-shape-btn" data-shape="pentagon" title="Regular Pentagon (5 sides)"><i class="fas fa-dice-d20"></i><span>Pentagon</span></button>
+                            <button type="button" class="wb-shape-btn" data-shape="hexagon" title="Regular Hexagon (6 sides)"><i class="fas fa-certificate"></i><span>Hexagon</span></button>
+                            <button type="button" class="wb-shape-btn" data-shape="ellipse" title="Ellipse"><i class="fas fa-egg"></i><span>Ellipse</span></button>
+                            <button type="button" class="wb-shape-btn" data-shape="arc" title="Circular Arc"><i class="fas fa-circle-notch"></i><span>Arc</span></button>
+                            <button type="button" class="wb-shape-btn" data-shape="sector" title="Circle Sector"><i class="fas fa-chart-pie"></i><span>Sector</span></button>
+                            <button type="button" class="wb-shape-btn" data-shape="angle" title="Angle with Arc"><i class="fas fa-drafting-compass"></i><span>Angle</span></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Categorized Math Tools Popover Panel -->
+                <div id="wbMathPopover" class="wb-popover-drawer" style="display: none;">
+                    <div class="wb-popover-header">
+                        <div class="wb-popover-title"><i class="fas fa-square-root-alt" style="color: #10b981;"></i> Mathematics Toolkit</div>
+                        <button type="button" class="wb-drawer-close-btn" onclick="VFFWhiteboard.toggleMathPopover(false)" title="Close (Esc)">✕</button>
+                    </div>
+                    <div class="wb-popover-body">
+                        <div class="wb-popover-category">CLASSROOM VISUALIZERS</div>
+                        <div class="wb-shape-grid">
+                            <button type="button" class="wb-shape-btn" data-shape="coord_plane" title="Coordinate Plane (X-Y Axes, Origin, Grid)"><i class="fas fa-arrows-alt" style="color: #2563eb;"></i><span>Coordinate</span></button>
+                            <button type="button" class="wb-shape-btn" data-shape="number_line" title="Configurable Number Line (-10 to +10)"><i class="fas fa-ruler-horizontal" style="color: #059669;"></i><span>Number Line</span></button>
+                            <button type="button" class="wb-shape-btn" data-shape="fraction_bar" title="Fraction Partition Comparison Bar"><i class="fas fa-columns" style="color: #8b5cf6;"></i><span>Fractions</span></button>
+                        </div>
+                        <div class="wb-popover-category">GEOMETRY &amp; MEASUREMENT</div>
+                        <div class="wb-shape-grid">
+                            <button type="button" class="wb-shape-btn" data-shape="ruler" title="Measurement Ruler (M)"><i class="fas fa-ruler" style="color: #d97706;"></i><span>Ruler</span></button>
+                            <button type="button" class="wb-shape-btn" data-shape="protractor" title="Semicircular Protractor (0°-180°)"><i class="fas fa-circle-notch" style="color: #2563eb;"></i><span>Protractor</span></button>
+                            <button type="button" class="wb-shape-btn" data-shape="right_triangle" title="Right Triangle (90° indicator)"><i class="fas fa-caret-up" style="color: #10b981; transform: skewX(-20deg);"></i><span>Right △</span></button>
+                            <button type="button" class="wb-shape-btn" data-shape="angle" title="Angle with Vertex &amp; Arc"><i class="fas fa-drafting-compass" style="color: #ec4899;"></i><span>Angle</span></button>
+                        </div>
+                        <div class="wb-popover-category">MATH GRIDS &amp; SURFACES</div>
+                        <div class="wb-shape-grid">
+                            <button type="button" class="wb-shape-btn" onclick="VFFWhiteboard.setGridPattern('math'); VFFWhiteboard.toggleMathPopover(false);" title="Math Grid (24px)"><i class="fas fa-border-all"></i><span>24px Grid</span></button>
+                            <button type="button" class="wb-shape-btn" onclick="VFFWhiteboard.setGridPattern('graph'); VFFWhiteboard.toggleMathPopover(false);" title="Fine Graph Paper"><i class="fas fa-th"></i><span>Graph Paper</span></button>
+                            <button type="button" class="wb-shape-btn" onclick="VFFWhiteboard.setGridPattern('coord'); VFFWhiteboard.toggleMathPopover(false);" title="Coordinate Plane Background"><i class="fas fa-crosshairs"></i><span>Full Grid</span></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Teaching Assets Drawer Popover -->
+                <div id="wbAssetsDrawer" class="wb-assets-drawer" style="display: none;">
+                    <div class="wb-assets-drawer-header">
+                        <div class="wb-assets-title"><i class="fas fa-shapes" style="color: #2563eb;"></i> Teaching Assets</div>
+                        <button type="button" id="wbCloseAssetsDrawerBtn" class="wb-drawer-close-btn" onclick="VFFWhiteboard.toggleAssetsDrawer(false)" title="Close (Esc)">✕</button>
+                    </div>
+
+                    <!-- Tab Navigation -->
+                    <div class="wb-assets-tabs">
+                        <button type="button" class="wb-asset-tab active" data-tab="annotations" onclick="VFFWhiteboard.switchAssetTab('annotations')"><i class="fas fa-stamp"></i> Stamps</button>
+                        <button type="button" class="wb-asset-tab" data-tab="infographics" onclick="VFFWhiteboard.switchAssetTab('infographics')"><i class="fas fa-project-diagram"></i> Infographics</button>
+                        <button type="button" class="wb-asset-tab" data-tab="templates" onclick="VFFWhiteboard.switchAssetTab('templates')"><i class="fas fa-layer-group"></i> Templates</button>
+                        <button type="button" class="wb-asset-tab" data-tab="blocks" onclick="VFFWhiteboard.switchAssetTab('blocks')"><i class="fas fa-cube"></i> Blocks</button>
+                    </div>
+
+                    <div class="wb-assets-tab-content">
+                        <!-- Tab 1: Teaching Annotations -->
+                        <div id="wbTabAnnotations" class="wb-tab-pane active">
+                            <div class="wb-category-pills">
+                                <button type="button" class="wb-pill-btn active" data-category="all" onclick="VFFWhiteboard.filterAnnotationCategory('all')">All</button>
+                                <button type="button" class="wb-pill-btn" data-category="classroom" onclick="VFFWhiteboard.filterAnnotationCategory('classroom')">Classroom</button>
+                                <button type="button" class="wb-pill-btn" data-category="actions" onclick="VFFWhiteboard.filterAnnotationCategory('actions')">Actions</button>
+                                <button type="button" class="wb-pill-btn" data-category="math" onclick="VFFWhiteboard.filterAnnotationCategory('math')">Maths</button>
+                                <button type="button" class="wb-pill-btn" data-category="science" onclick="VFFWhiteboard.filterAnnotationCategory('science')">Science</button>
+                                <button type="button" class="wb-pill-btn" data-category="english" onclick="VFFWhiteboard.filterAnnotationCategory('english')">English</button>
+                                <button type="button" class="wb-pill-btn" data-category="speech" onclick="VFFWhiteboard.filterAnnotationCategory('speech')">Speech</button>
+                            </div>
+                            <div class="wb-annotations-grid" id="wbAnnotationsGrid"></div>
+                        </div>
+
+                        <!-- Tab 2: Infographics Builder (All 9 Types) -->
+                        <div id="wbTabInfographics" class="wb-tab-pane" style="display: none;">
+                            <p class="wb-tab-desc">Click to place an editable visual infographic structure on the board:</p>
+                            <div class="wb-infographics-grid">
+                                <div class="wb-info-card" onclick="VFFWhiteboard.insertInfographic('process3'); VFFWhiteboard.toggleAssetsDrawer(false);">
+                                    <div class="wb-info-icon"><i class="fas fa-arrow-right"></i></div>
+                                    <div class="wb-info-title">3-Step Process</div>
+                                    <div class="wb-info-sub">[ Step 1 ] → [ Step 2 ] → [ Step 3 ]</div>
+                                </div>
+                                <div class="wb-info-card" onclick="VFFWhiteboard.insertInfographic('timeline'); VFFWhiteboard.toggleAssetsDrawer(false);">
+                                    <div class="wb-info-icon"><i class="fas fa-stream"></i></div>
+                                    <div class="wb-info-title">Timeline Axis</div>
+                                    <div class="wb-info-sub">4 chronological milestone cards</div>
+                                </div>
+                                <div class="wb-info-card" onclick="VFFWhiteboard.insertInfographic('cycle'); VFFWhiteboard.toggleAssetsDrawer(false);">
+                                    <div class="wb-info-icon"><i class="fas fa-sync-alt"></i></div>
+                                    <div class="wb-info-title">Cycle Diagram</div>
+                                    <div class="wb-info-sub">Circular repeating steps loop</div>
+                                </div>
+                                <div class="wb-info-card" onclick="VFFWhiteboard.insertInfographic('cause_effect'); VFFWhiteboard.toggleAssetsDrawer(false);">
+                                    <div class="wb-info-icon"><i class="fas fa-exchange-alt"></i></div>
+                                    <div class="wb-info-title">Cause → Effect</div>
+                                    <div class="wb-info-sub">[ Trigger Event ] ➔ [ Direct Result ]</div>
+                                </div>
+                                <div class="wb-info-card" onclick="VFFWhiteboard.insertInfographic('compare'); VFFWhiteboard.toggleAssetsDrawer(false);">
+                                    <div class="wb-info-icon"><i class="fas fa-columns"></i></div>
+                                    <div class="wb-info-title">Comparison Cards</div>
+                                    <div class="wb-info-sub">Side-by-side [ Concept A ] vs [ Concept B ]</div>
+                                </div>
+                                <div class="wb-info-card" onclick="VFFWhiteboard.insertInfographic('mind_map'); VFFWhiteboard.toggleAssetsDrawer(false);">
+                                    <div class="wb-info-icon"><i class="fas fa-sitemap"></i></div>
+                                    <div class="wb-info-title">Mind Map</div>
+                                    <div class="wb-info-sub">Central theme with radial subtopic nodes</div>
+                                </div>
+                                <div class="wb-info-card" onclick="VFFWhiteboard.insertInfographic('key_concept'); VFFWhiteboard.toggleAssetsDrawer(false);">
+                                    <div class="wb-info-icon"><i class="fas fa-lightbulb"></i></div>
+                                    <div class="wb-info-title">Key Concept</div>
+                                    <div class="wb-info-sub">Core rule, context & real-world impact</div>
+                                </div>
+                                <div class="wb-info-card" onclick="VFFWhiteboard.insertInfographic('sequence'); VFFWhiteboard.toggleAssetsDrawer(false);">
+                                    <div class="wb-info-icon"><i class="fas fa-ellipsis-h"></i></div>
+                                    <div class="wb-info-title">5-Stage Sequence</div>
+                                    <div class="wb-info-sub">Progressive 5-step structured flow</div>
+                                </div>
+                                <div class="wb-info-card" onclick="VFFWhiteboard.insertInfographic('problem_solution'); VFFWhiteboard.toggleAssetsDrawer(false);">
+                                    <div class="wb-info-icon"><i class="fas fa-check-circle"></i></div>
+                                    <div class="wb-info-title">Problem → Solution</div>
+                                    <div class="wb-info-sub">Problem ➔ Analysis ➔ Solution ➔ Result</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tab 3: Curriculum Teaching Templates -->
+                        <div id="wbTabTemplates" class="wb-tab-pane" style="display: none;">
+                            <p class="wb-tab-desc">Instant curriculum canvases ready for active explanation:</p>
+                            <div class="wb-templates-section">
+                                <div class="wb-sec-title"><i class="fas fa-flask" style="color: #10b981;"></i> Science</div>
+                                <div class="wb-template-grid">
+                                    <div class="wb-tmpl-card" onclick="VFFWhiteboard.loadTeachingTemplate('water_cycle'); VFFWhiteboard.toggleAssetsDrawer(false);">
+                                        <span class="wb-tmpl-badge">Science</span>
+                                        <div class="wb-tmpl-title">Water Cycle Canvas</div>
+                                        <div class="wb-tmpl-desc">Evaporation → Condensation → Precipitation → Collection</div>
+                                    </div>
+                                    <div class="wb-tmpl-card" onclick="VFFWhiteboard.loadTeachingTemplate('plant_cell'); VFFWhiteboard.toggleAssetsDrawer(false);">
+                                        <span class="wb-tmpl-badge">Biology</span>
+                                        <div class="wb-tmpl-title">Plant Cell Diagram</div>
+                                        <div class="wb-tmpl-desc">Wall, Nucleus, Chloroplast & Vacuole callouts</div>
+                                    </div>
+                                    <div class="wb-tmpl-card" onclick="VFFWhiteboard.loadTeachingTemplate('science_obs'); VFFWhiteboard.toggleAssetsDrawer(false);">
+                                        <span class="wb-tmpl-badge">Lab Sheet</span>
+                                        <div class="wb-tmpl-title">Experiment Sheet</div>
+                                        <div class="wb-tmpl-desc">Hypothesis → Observation → Result → Conclusion</div>
+                                    </div>
+                                </div>
+
+                                <div class="wb-sec-title"><i class="fas fa-square-root-alt" style="color: #2563eb;"></i> Mathematics</div>
+                                <div class="wb-template-grid">
+                                    <div class="wb-tmpl-card" onclick="VFFWhiteboard.loadTeachingTemplate('fractions'); VFFWhiteboard.toggleAssetsDrawer(false);">
+                                        <span class="wb-tmpl-badge">Math</span>
+                                        <div class="wb-tmpl-title">Fraction Comparison</div>
+                                        <div class="wb-tmpl-desc">Visual comparison bars for 1, 1/2, 1/4, 1/8</div>
+                                    </div>
+                                    <div class="wb-tmpl-card" onclick="VFFWhiteboard.loadTeachingTemplate('number_line'); VFFWhiteboard.toggleAssetsDrawer(false);">
+                                        <span class="wb-tmpl-badge">Math</span>
+                                        <div class="wb-tmpl-title">Number Line (-10 to +10)</div>
+                                        <div class="wb-tmpl-desc">Centered line with step increments</div>
+                                    </div>
+                                    <div class="wb-tmpl-card" onclick="VFFWhiteboard.loadTeachingTemplate('coord_plane'); VFFWhiteboard.toggleAssetsDrawer(false);">
+                                        <span class="wb-tmpl-badge">Geometry</span>
+                                        <div class="wb-tmpl-title">Coordinate Plane (X-Y)</div>
+                                        <div class="wb-tmpl-desc">4-quadrant coordinate grid with marked axes</div>
+                                    </div>
+                                </div>
+
+                                <div class="wb-sec-title"><i class="fas fa-book-open" style="color: #6366f1;"></i> English & Grammar</div>
+                                <div class="wb-template-grid">
+                                    <div class="wb-tmpl-card" onclick="VFFWhiteboard.loadTeachingTemplate('vocab_matrix'); VFFWhiteboard.toggleAssetsDrawer(false);">
+                                        <span class="wb-tmpl-badge">English</span>
+                                        <div class="wb-tmpl-title">Vocabulary Matrix</div>
+                                        <div class="wb-tmpl-desc">Word → Meaning → Example Sentence table</div>
+                                    </div>
+                                    <div class="wb-tmpl-card" onclick="VFFWhiteboard.loadTeachingTemplate('reading_comp'); VFFWhiteboard.toggleAssetsDrawer(false);">
+                                        <span class="wb-tmpl-badge">Reading</span>
+                                        <div class="wb-tmpl-title">Reading Comprehension</div>
+                                        <div class="wb-tmpl-desc">Passage analysis, main idea & supporting clues</div>
+                                    </div>
+                                </div>
+
+                                <div class="wb-sec-title"><i class="fas fa-microphone-alt" style="color: #f59e0b;"></i> Public Speaking</div>
+                                <div class="wb-template-grid">
+                                    <div class="wb-tmpl-card" onclick="VFFWhiteboard.loadTeachingTemplate('speech_outline'); VFFWhiteboard.toggleAssetsDrawer(false);">
+                                        <span class="wb-tmpl-badge">Speech</span>
+                                        <div class="wb-tmpl-title">3-Part Speech Structure</div>
+                                        <div class="wb-tmpl-desc">Hook → 3 Arguments / Body → Call to Action</div>
+                                    </div>
+                                    <div class="wb-tmpl-card" onclick="VFFWhiteboard.loadTeachingTemplate('cue_cards'); VFFWhiteboard.toggleAssetsDrawer(false);">
+                                        <span class="wb-tmpl-badge">Debate</span>
+                                        <div class="wb-tmpl-title">Speech Cue Cards</div>
+                                        <div class="wb-tmpl-desc">Presenter cards with key points & timings</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tab 4: Lesson Blocks (Teaching-First Pedagogical Cards) -->
+                        <div id="wbTabBlocks" class="wb-tab-pane" style="display: none;">
+                            <p class="wb-tab-desc">Movable lesson elements that can be dragged, edited, duplicated, and deleted:</p>
+                            <div class="wb-blocks-catalog">
+                                <div class="wb-block-card" onclick="VFFWhiteboard.addLessonBlock('reveal'); VFFWhiteboard.toggleAssetsDrawer(false);">
+                                    <div class="wb-block-icon" style="color: #2563eb;"><i class="fas fa-eye-slash"></i></div>
+                                    <div class="wb-block-info">
+                                        <div class="wb-block-name">Question + Reveal Answer</div>
+                                        <div class="wb-block-sub">Hide answer until you tap "Reveal Answer"</div>
+                                    </div>
+                                </div>
+                                <div class="wb-block-card" onclick="VFFWhiteboard.addLessonBlock('concept'); VFFWhiteboard.toggleAssetsDrawer(false);">
+                                    <div class="wb-block-icon" style="color: #10b981;"><i class="fas fa-lightbulb"></i></div>
+                                    <div class="wb-block-info">
+                                        <div class="wb-block-name">Key Concept Card</div>
+                                        <div class="wb-block-sub">Highlighted teaching takeaway banner</div>
+                                    </div>
+                                </div>
+                                <div class="wb-block-card" onclick="VFFWhiteboard.addLessonBlock('example'); VFFWhiteboard.toggleAssetsDrawer(false);">
+                                    <div class="wb-block-icon" style="color: #6366f1;"><i class="fas fa-graduation-cap"></i></div>
+                                    <div class="wb-block-info">
+                                        <div class="wb-block-name">Model Example Card</div>
+                                        <div class="wb-block-sub">Problem statement with step-by-step solution</div>
+                                    </div>
+                                </div>
+                                <div class="wb-block-card" onclick="VFFWhiteboard.addLessonBlock('takeaway'); VFFWhiteboard.toggleAssetsDrawer(false);">
+                                    <div class="wb-block-icon" style="color: #f59e0b;"><i class="fas fa-star"></i></div>
+                                    <div class="wb-block-info">
+                                        <div class="wb-block-name">Key Takeaway</div>
+                                        <div class="wb-block-sub">High-priority lesson summary card</div>
+                                    </div>
+                                </div>
+                                <div class="wb-block-card" onclick="VFFWhiteboard.addLessonBlock('vocab'); VFFWhiteboard.toggleAssetsDrawer(false);">
+                                    <div class="wb-block-icon" style="color: #0ea5e9;"><i class="fas fa-spell-check"></i></div>
+                                    <div class="wb-block-info">
+                                        <div class="wb-block-name">Vocabulary Card</div>
+                                        <div class="wb-block-sub">Word, part of speech, definition & sentence</div>
+                                    </div>
+                                </div>
+                                <div class="wb-block-card" onclick="VFFWhiteboard.addLessonBlock('tip'); VFFWhiteboard.toggleAssetsDrawer(false);">
+                                    <div class="wb-block-icon" style="color: #14b8a6;"><i class="fas fa-chalkboard-teacher"></i></div>
+                                    <div class="wb-block-info">
+                                        <div class="wb-block-name">Teacher Tip</div>
+                                        <div class="wb-block-sub">Pedagogical guidance or student strategy</div>
+                                    </div>
+                                </div>
+                                <div class="wb-block-card" onclick="VFFWhiteboard.addLessonBlock('definition'); VFFWhiteboard.toggleAssetsDrawer(false);">
+                                    <div class="wb-block-icon" style="color: #3b82f6;"><i class="fas fa-bookmark"></i></div>
+                                    <div class="wb-block-info">
+                                        <div class="wb-block-name">Definition Card</div>
+                                        <div class="wb-block-sub">Formal curriculum term definition</div>
+                                    </div>
+                                </div>
+                                <div class="wb-block-card" onclick="VFFWhiteboard.addLessonBlock('compare_block'); VFFWhiteboard.toggleAssetsDrawer(false);">
+                                    <div class="wb-block-icon" style="color: #8b5cf6;"><i class="fas fa-columns"></i></div>
+                                    <div class="wb-block-info">
+                                        <div class="wb-block-name">Compare & Contrast</div>
+                                        <div class="wb-block-sub">Two-column side-by-side comparison</div>
+                                    </div>
+                                </div>
+                                <div class="wb-block-card" onclick="VFFWhiteboard.addLessonBlock('note', { color: 'yellow' }); VFFWhiteboard.toggleAssetsDrawer(false);">
+                                    <div class="wb-block-icon" style="color: #ca8a04;"><i class="fas fa-sticky-note"></i></div>
+                                    <div class="wb-block-info">
+                                        <div class="wb-block-name">Sticky Note (Yellow)</div>
+                                        <div class="wb-block-sub">Teacher thoughts, homework, or student ideas</div>
+                                    </div>
+                                </div>
+                                <div class="wb-block-card" onclick="VFFWhiteboard.addLessonBlock('note', { color: 'mint' }); VFFWhiteboard.toggleAssetsDrawer(false);">
+                                    <div class="wb-block-icon" style="color: #16a34a;"><i class="fas fa-sticky-note"></i></div>
+                                    <div class="wb-block-info">
+                                        <div class="wb-block-name">Sticky Note (Mint)</div>
+                                        <div class="wb-block-sub">Calm green pastel sticky note</div>
+                                    </div>
+                                </div>
+                                <div class="wb-block-card" onclick="VFFWhiteboard.addLessonBlock('note', { color: 'blue' }); VFFWhiteboard.toggleAssetsDrawer(false);">
+                                    <div class="wb-block-icon" style="color: #2563eb;"><i class="fas fa-sticky-note"></i></div>
+                                    <div class="wb-block-info">
+                                        <div class="wb-block-name">Sticky Note (Blue)</div>
+                                        <div class="wb-block-sub">Soft blue pastel sticky note</div>
+                                    </div>
+                                </div>
+                                <div class="wb-block-card" onclick="VFFWhiteboard.addLessonBlock('note', { color: 'peach' }); VFFWhiteboard.toggleAssetsDrawer(false);">
+                                    <div class="wb-block-icon" style="color: #ea580c;"><i class="fas fa-sticky-note"></i></div>
+                                    <div class="wb-block-info">
+                                        <div class="wb-block-name">Sticky Note (Peach)</div>
+                                        <div class="wb-block-sub">Warm peach pastel sticky note</div>
+                                    </div>
+                                </div>
+                                <div class="wb-block-card" onclick="VFFWhiteboard.addLessonBlock('task'); VFFWhiteboard.toggleAssetsDrawer(false);">
+                                    <div class="wb-block-icon" style="color: #8b5cf6;"><i class="fas fa-tasks"></i></div>
+                                    <div class="wb-block-info">
+                                        <div class="wb-block-name">Student Practice Task</div>
+                                        <div class="wb-block-sub">Checklist with interactive tick boxes</div>
+                                    </div>
+                                </div>
+                                <div class="wb-block-card" onclick="VFFWhiteboard.addLessonBlock('reminder'); VFFWhiteboard.toggleAssetsDrawer(false);">
+                                    <div class="wb-block-icon" style="color: #ef4444;"><i class="fas fa-bell"></i></div>
+                                    <div class="wb-block-info">
+                                        <div class="wb-block-name">Lesson Reminder</div>
+                                        <div class="wb-block-sub">Quick alert for tests, dates, or formulas</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Canvas Viewport -->
+                <div class="wb-canvas-container grid-dots" id="wbCanvasContainer" data-surface="white">
+                    <!-- Dedicated PDF Worksheet Underlay Canvas (Isolated from User Drawing Ink) -->
+                    <canvas id="wbPdfCanvas" class="wb-pdf-canvas" aria-label="PDF Document Layer"></canvas>
+
+                    <!-- Dedicated Educational Image & Diagram Layer (Isolated from Ink Eraser) -->
+                    <canvas id="wbImageCanvas" class="wb-image-canvas" aria-label="Educational Image & Diagram Layer"></canvas>
+
+                    <!-- Interactive Drawing Ink & Shape Canvas (Subject to Ink Eraser) -->
+                    <canvas id="whiteboardCanvas" class="wb-drawing-canvas" aria-label="Interactive Teaching Canvas"></canvas>
+                    
+                    <!-- Movable Lesson Blocks Layer -->
+                    <div id="wbBlocksLayer" class="wb-blocks-layer" aria-label="Interactive Lesson Blocks"></div>
+
+                    <!-- Non-Destructive Teaching Object Selection Overlay -->
+                    <div id="wbSelectionOverlay" class="wb-selection-overlay" style="display: none;" aria-label="Teaching Object Selection Overlay">
+                        <div id="wbSelectionBox" class="wb-selection-box">
+                            <!-- 8 Interactive Resize Handles -->
+                            <div class="wb-handle handle-nw" data-handle="nw" title="Resize North-West"></div>
+                            <div class="wb-handle handle-n" data-handle="n" title="Resize North"></div>
+                            <div class="wb-handle handle-ne" data-handle="ne" title="Resize North-East"></div>
+                            <div class="wb-handle handle-e" data-handle="e" title="Resize East"></div>
+                            <div class="wb-handle handle-se" data-handle="se" title="Resize South-East"></div>
+                            <div class="wb-handle handle-s" data-handle="s" title="Resize South"></div>
+                            <div class="wb-handle handle-sw" data-handle="sw" title="Resize South-West"></div>
+                            <div class="wb-handle handle-w" data-handle="w" title="Resize West"></div>
+
+                            <!-- Floating Contextual Mini-Toolbar -->
+                            <div id="wbSelectionToolbar" class="wb-floating-context-toolbar" aria-label="Selection Actions">
+                                <span class="wb-sel-type-badge" id="wbSelTypeBadge"><i class="fas fa-layer-group"></i> <span id="wbSelTypeText">Object</span></span>
+                                <div class="wb-sel-divider"></div>
+                                <button type="button" class="wb-sel-btn" id="wbSelDuplicateBtn" title="Duplicate Object (Ctrl+D)"><i class="fas fa-clone"></i></button>
+                                <button type="button" class="wb-sel-btn" id="wbSelLockBtn" title="Lock / Unlock Object"><i class="fas fa-lock-open" id="wbSelLockIcon"></i></button>
+                                <button type="button" class="wb-sel-btn" id="wbSelForwardBtn" title="Bring Forward"><i class="fas fa-level-up-alt"></i></button>
+                                <button type="button" class="wb-sel-btn" id="wbSelBackBtn" title="Send Back"><i class="fas fa-level-down-alt"></i></button>
+                                <div class="wb-sel-divider"></div>
+                                <button type="button" class="wb-sel-btn wb-sel-danger" id="wbSelDeleteBtn" title="Delete Object (Delete / Backspace)"><i class="fas fa-trash-alt"></i></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Presentation Spotlight Overlay Canvas -->
+                    <canvas id="wbSpotlightCanvas" class="wb-spotlight-canvas" style="display: none;"></canvas>
+
+                    <!-- Presentation Transient Laser Canvas -->
+                    <canvas id="wbLaserCanvas" class="wb-laser-canvas" style="display: none;"></canvas>
+
+                    <!-- Direct-on-Canvas Inline Text Area (No Dialog, No Popup, Native Caret) -->
+                    <textarea id="wbDirectText" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" data-lpignore="true" data-1p-ignore="true" data-form-type="other" aria-label="Direct canvas text input"></textarea>
+
+                    <!-- Compact Quick Re-open Button for Onboarding Guide -->
+                    <button type="button" id="wbEmptyReopenBtn" class="wb-empty-reopen-btn" style="display: none;" title="Show Lesson Starter Guide" onclick="VFFWhiteboard.toggleEmptyState(true)">
+                        <i class="fas fa-lightbulb"></i> <span>Start Guide</span>
+                    </button>
+
+                    <!-- Polished Teacher-Focused Onboarding Empty State -->
+                    <div id="wbEmptyState" class="wb-empty-state">
+                        <button type="button" id="wbEmptyDismissBtn" class="wb-empty-close-btn" title="Minimize starter guide" onclick="VFFWhiteboard.toggleEmptyState(false)">✕</button>
+                        <span class="wb-empty-badge"><i class="fas fa-chalkboard-teacher"></i> VFF Teaching Studio</span>
+                        <h2 class="wb-empty-title">Start Your Lesson</h2>
+                        <p class="wb-empty-sub">Bring your teaching material into the studio and start explaining:</p>
+                        <div class="wb-empty-grid">
+                            <div class="wb-empty-card" id="wbEmptyUploadPdfBtn">
+                                <div class="wb-empty-card-icon"><i class="fas fa-file-pdf"></i></div>
+                                <div class="wb-empty-card-title">Annotate PDF Worksheet</div>
+                                <div class="wb-empty-card-desc">Upload worksheets, exam papers, or multi-page lesson slides</div>
+                            </div>
+                            <div class="wb-empty-card" id="wbEmptyUploadImgBtn">
+                                <div class="wb-empty-card-icon"><i class="fas fa-image"></i></div>
+                                <div class="wb-empty-card-title">Add Diagram / Image</div>
+                                <div class="wb-empty-card-desc">Import scientific charts, maps, or classroom illustrations</div>
+                            </div>
+                            <div class="wb-empty-card" id="wbEmptyBlankBtn">
+                                <div class="wb-empty-card-icon"><i class="fas fa-pen-fancy"></i></div>
+                                <div class="wb-empty-card-title">Start Blank Board</div>
+                                <div class="wb-empty-card-desc">Write, draw, and explain with freehand and shape tools</div>
+                            </div>
+                            <div class="wb-empty-card" id="wbEmptyTextBtn">
+                                <div class="wb-empty-card-icon"><i class="fas fa-font"></i></div>
+                                <div class="wb-empty-card-title">Type Lesson Notes</div>
+                                <div class="wb-empty-card-desc">Type directly on the canvas with seamless multiline formatting</div>
+                            </div>
+                        </div>
+                        <div class="wb-empty-footer">
+                            <i class="fas fa-shield-alt"></i> Built for teachers, tutors & educators • Stylus, touch & screen-share friendly
+                        </div>
+                    </div>
+
+                    <!-- Floating Multi-Page Presentation Navigation -->
+                    <div id="wbPdfNavGroup" class="wb-floating-pdf-nav" style="display: none;">
+                        <button id="wbPdfFirst" class="wb-nav-btn" title="First Page (Home)"><i class="fas fa-step-backward"></i></button>
+                        <button id="wbPdfPrev" class="wb-nav-btn" title="Previous Page (ArrowLeft / PageUp)"><i class="fas fa-chevron-left"></i></button>
+                        <span id="wbPdfPageNum" class="wb-nav-badge">Page 1 / 1</span>
+                        <button id="wbPdfNext" class="wb-nav-btn" title="Next Page (ArrowRight / PageDown)"><i class="fas fa-chevron-right"></i></button>
+                        <button id="wbPdfLast" class="wb-nav-btn" title="Last Page (End)"><i class="fas fa-step-forward"></i></button>
+                        <button id="wbPdfChalkboardBtn" class="wb-nav-btn" title="Toggle Chalkboard PDF Mode (Invert document colors for dark/contrast presentation)" aria-label="Toggle Chalkboard PDF Mode" style="margin-left: 4px; color: #10b981;"><i class="fas fa-adjust"></i></button>
+                    </div>
+
+                    <!-- Floating Canvas Zoom Controls -->
+                    <div class="wb-float-controls">
+                        <button id="wbZoomOut" class="wb-tool-btn" style="width: 28px; height: 28px; min-width: 28px; min-height: 28px;" title="Zoom Out"><i class="fas fa-minus"></i></button>
+                        <span id="wbZoomVal" style="font-size: 0.78rem; font-weight: 700; min-width: 40px; text-align: center; color: var(--wb-text-dark);">100%</span>
+                        <button id="wbZoomIn" class="wb-tool-btn" style="width: 28px; height: 28px; min-width: 28px; min-height: 28px;" title="Zoom In"><i class="fas fa-plus"></i></button>
+                        <button id="wbZoomReset" class="wb-tool-btn" style="width: 28px; height: 28px; min-width: 28px; min-height: 28px; margin-left: 3px;" title="Reset Zoom"><i class="fas fa-compress-arrows-alt"></i></button>
+                    </div>
+
+                    <!-- Presentation Mode Floating Trigger Button -->
+                    <button id="wbPresToolsBtn" class="wb-pres-tools-btn" title="Show Teaching Tools" style="display: none;"><i class="fas fa-pen-nib"></i> Tools</button>
+
+                    <!-- Presentation Mode Slide-Over / Floating Teaching Tool Panel -->
+                    <div id="wbPresToolPanel" class="wb-pres-tool-panel" style="display: none;">
+                        <div class="wb-pres-tool-header">
+                            <span><i class="fas fa-pen-nib"></i> Teaching Tools</span>
+                            <button type="button" id="wbPresHideToolsBtn" class="wb-pres-hide-btn" title="Hide Tools (Esc / ←)">✕</button>
+                        </div>
+                        <!-- Quick Ink Color Row -->
+                        <div class="wb-pres-color-row" title="Quick Ink Color">
+                            <button type="button" class="wb-pres-color-dot active" data-color="#2563eb" style="background:#2563eb;" title="Blue"></button>
+                            <button type="button" class="wb-pres-color-dot" data-color="#dc2626" style="background:#dc2626;" title="Red"></button>
+                            <button type="button" class="wb-pres-color-dot" data-color="#16a34a" style="background:#16a34a;" title="Green"></button>
+                            <button type="button" class="wb-pres-color-dot" data-color="#ca8a04" style="background:#ca8a04;" title="Yellow"></button>
+                            <button type="button" class="wb-pres-color-dot" data-color="#0f172a" style="background:#0f172a; border: 1px solid #475569;" title="Dark Slate"></button>
+                            <button type="button" class="wb-pres-color-dot" data-color="#ffffff" style="background:#ffffff; border: 1px solid #94a3b8;" title="White"></button>
+                        </div>
+                        <div class="wb-pres-tool-grid">
+                            <button class="wb-tool-btn" data-tool="select" title="Select Teaching Object (V)"><i class="fas fa-mouse-pointer"></i></button>
+                            <button class="wb-tool-btn active" data-tool="pen" title="Pen (P / B)"><i class="fas fa-pen"></i></button>
+                            <button class="wb-tool-btn" data-tool="highlighter" title="Highlighter (H)"><i class="fas fa-highlighter"></i></button>
+                            <button class="wb-tool-btn" data-tool="eraser" title="Eraser (E)"><i class="fas fa-eraser"></i></button>
+                            <button class="wb-tool-btn" data-tool="text" title="Direct Text (T)"><i class="fas fa-font"></i></button>
+                            <button class="wb-tool-btn" data-tool="line" title="Line (L)"><i class="fas fa-minus"></i></button>
+                            <button class="wb-tool-btn" data-tool="arrow" title="Arrow Callout (A)"><i class="fas fa-long-arrow-alt-right"></i></button>
+                            <button class="wb-tool-btn" data-tool="double_arrow" title="Double-Ended Arrow"><i class="fas fa-arrows-alt-h"></i></button>
+                            <button class="wb-tool-btn" data-tool="curved_arrow" title="Curved Arrow"><i class="fas fa-reply" style="transform: scaleX(-1);"></i></button>
+                            <button class="wb-tool-btn" data-tool="callout" title="Speech Callout"><i class="fas fa-comment-alt"></i></button>
+                            <button class="wb-tool-btn" data-tool="rectangle" title="Rectangle (R)"><i class="far fa-square"></i></button>
+                            <button class="wb-tool-btn" data-tool="circle" title="Circle (C)"><i class="far fa-circle"></i></button>
+                            <button class="wb-tool-btn" data-tool="triangle" title="Geometry Triangle"><i class="fas fa-play" style="transform: rotate(-90deg); font-size: 0.75rem;"></i></button>
+                            <button class="wb-tool-btn" data-tool="ruler" title="Measurement Ruler (M)"><i class="fas fa-ruler"></i></button>
+                            <button class="wb-tool-btn" data-tool="pan" title="Pan Canvas (Space hold)"><i class="fas fa-hand-paper"></i></button>
+                            <!-- Stylus Only Palm Rejection Quick Toggle -->
+                            <button type="button" class="wb-tool-btn" id="wbPresStylusBtn" title="Stylus Only (Ignore accidental finger drawing)"><i class="fas fa-pen-fancy"></i></button>
+                            <!-- Subject Specific Drawer Trigger -->
+                            <button type="button" class="wb-tool-btn wb-drawer-trigger-btn" id="wbPresSubjectBtn" onclick="VFFWhiteboard.toggleSubjectDrawer()" title="Subject Teaching Toolkit (Math, Science, English, Speech)"><i class="fas fa-layer-group"></i></button>
+                            <!-- Presentation Specialized Controls -->
+                            <button type="button" class="wb-tool-btn" id="wbPresSpotlightBtn" onclick="VFFWhiteboard.toggleSpotlight()" title="Spotlight Focus Mode (Dims background)"><i class="fas fa-bullseye"></i></button>
+                            <button type="button" class="wb-tool-btn" id="wbPresLaserBtn" onclick="VFFWhiteboard.toggleLaser()" title="Laser Pointer"><i class="fas fa-magic"></i></button>
+                            <button type="button" class="wb-tool-btn" id="wbPresAssetsBtn" onclick="VFFWhiteboard.toggleAssetsDrawer()" title="Teaching Assets Drawer (Stamps, Infographics, Templates, Blocks)"><i class="fas fa-shapes"></i></button>
+                        </div>
+                        <div class="wb-pres-tool-footer">
+                            <button type="button" id="wbPresUndoBtn" class="wb-nav-btn" title="Undo (Ctrl+Z)"><i class="fas fa-undo"></i></button>
+                            <button type="button" id="wbPresRedoBtn" class="wb-nav-btn" title="Redo (Ctrl+Y)"><i class="fas fa-redo"></i></button>
+                            <button type="button" id="wbPresClearBtn" class="wb-nav-btn" title="Clear Canvas" style="color: #ef4444;"><i class="fas fa-trash-alt"></i></button>
+                        </div>
+                    </div>
+
+                    <!-- Presentation Mode Ad Strip -->
+                    <div id="vffAdPresentation" class="vff-ad-presentation" aria-label="Advertisement" style="display: none;"></div>
+                </div>
+
+                <!-- Right-Side Reserved Teaching Ad Rail (Desktop Only: 170px) -->
+                <aside id="vffAdRail" class="vff-ad-rail" aria-label="Advertisement">
+                    <div class="wb-ad-rail-fallback" id="wbAdRailFallback">
+                        <div class="wb-rail-card">
+                            <div class="wb-rail-header"><i class="fas fa-chalkboard"></i> Lesson Overview</div>
+                            <div class="wb-rail-item">
+                                <span class="wb-rail-label">Subject</span>
+                                <span class="wb-rail-val" id="wbRailSubject">General</span>
+                            </div>
+                            <div class="wb-rail-item">
+                                <span class="wb-rail-label">Stage</span>
+                                <span class="wb-rail-val" id="wbRailStage">1. Intro</span>
+                            </div>
+                            <div class="wb-rail-item">
+                                <span class="wb-rail-label">Blocks</span>
+                                <span class="wb-rail-val" id="wbRailBlocks">0 Active</span>
+                            </div>
+                            <div class="wb-rail-progress-wrap" title="Lesson progress">
+                                <div class="wb-rail-progress-bar"><div class="wb-rail-progress-fill" id="wbRailProgressFill" style="width: 12.5%;"></div></div>
+                            </div>
+                        </div>
+                        <div class="wb-rail-card wb-rail-actions-card">
+                            <div class="wb-rail-header"><i class="fas fa-bolt"></i> Quick Stamping</div>
+                            <button type="button" class="wb-rail-action-btn" onclick="VFFWhiteboard.stampSticker('important')"><i class="fas fa-star" style="color: #ef4444;"></i> Important</button>
+                            <button type="button" class="wb-rail-action-btn" onclick="VFFWhiteboard.stampSticker('idea')"><i class="fas fa-lightbulb" style="color: #f59e0b;"></i> Key Idea</button>
+                            <button type="button" class="wb-rail-action-btn" onclick="VFFWhiteboard.stampSticker('question')"><i class="fas fa-question-circle" style="color: #2563eb;"></i> Question</button>
+                            <button type="button" class="wb-rail-action-btn" onclick="VFFWhiteboard.addLessonBlock('note', { color: 'yellow' })"><i class="fas fa-sticky-note" style="color: #ca8a04;"></i> Sticky Note</button>
+                            <button type="button" class="wb-rail-action-btn" onclick="VFFWhiteboard.addLessonBlock('reveal')"><i class="fas fa-eye-slash" style="color: #8b5cf6;"></i> Reveal Card</button>
+                        </div>
+                    </div>
+                </aside>
+
+            </div>
+
+            <!-- FIRST-VISIT TEACHING DATA CONSENT MODAL (PHASE 2.7) -->
+            <div id="wbConsentModal" class="wb-consent-backdrop" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="wbConsentTitle" aria-describedby="wbConsentDesc">
+                <div class="wb-consent-modal">
+                    <div class="wb-consent-header">
+                        <div class="wb-consent-badge">
+                            <i class="fas fa-shield-alt"></i>
+                            <span>Privacy &amp; Teaching Intelligence</span>
+                        </div>
+                        <button type="button" class="wb-consent-close-btn" id="wbConsentCloseBtn" aria-label="Close dialog without consenting">&times;</button>
+                    </div>
+                    
+                    <h2 id="wbConsentTitle" class="wb-consent-title">Help Improve VFF Teaching Intelligence</h2>
+                    
+                    <p id="wbConsentDesc" class="wb-consent-main-copy">
+                        Would you like to help VFF improve future teaching tools and AI using eligible teaching data from your Teaching Studio activity?
+                    </p>
+
+                    <!-- Core Privacy Guarantees Grid -->
+                    <div class="wb-consent-guarantees">
+                        <div class="wb-consent-guarantee-item">
+                            <i class="fas fa-check-circle" style="color: #10b981;"></i>
+                            <div>
+                                <strong>100% Voluntary:</strong> Teaching Studio is fully functional with all tools, surfaces, PDF underlays, and exports whether you choose Not Now or Allow.
+                            </div>
+                        </div>
+                        <div class="wb-consent-guarantee-item">
+                            <i class="fas fa-check-circle" style="color: #10b981;"></i>
+                            <div>
+                                <strong>Educator Stays in Control:</strong> You can review, change, or withdraw your choice at any time in Privacy &amp; Teaching Data Settings.
+                            </div>
+                        </div>
+                        <div class="wb-consent-guarantee-item">
+                            <i class="fas fa-check-circle" style="color: #10b981;"></i>
+                            <div>
+                                <strong>No Automatic Content Rights:</strong> Uploading a PDF worksheet or recording a lesson does <em>not</em> automatically give VFF permission to use that material for AI improvement.
+                            </div>
+                        </div>
+                        <div class="wb-consent-guarantee-item">
+                            <i class="fas fa-check-circle" style="color: #10b981;"></i>
+                            <div>
+                                <strong>Student Privacy First:</strong> Student personal information (names, voices, faces, grades) is not automatically included or collected.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Expandable Details Accordion -->
+                    <div class="wb-consent-accordion">
+                        <details class="wb-consent-details" id="wbConsentWhatIncluded">
+                            <summary class="wb-consent-summary">
+                                <span><i class="fas fa-layer-group"></i> What may be considered?</span>
+                                <i class="fas fa-chevron-down wb-consent-chevron"></i>
+                            </summary>
+                            <div class="wb-consent-details-body">
+                                <p>Future voluntary contribution will evaluate distinct categories with appropriate eligibility and privacy filtering:</p>
+                                <ol class="wb-consent-category-list">
+                                    <li><strong>Teaching patterns and tool usage:</strong> Anonymous tool transitions, zoom, and surface selections.</li>
+                                    <li><strong>Lesson structure and teaching stages:</strong> Structural stages (e.g., Intro &rarr; Explain &rarr; Reveal &rarr; Practice).</li>
+                                    <li><strong>Selected teaching materials:</strong> Only materials voluntarily contributed after copyright and privacy review.</li>
+                                    <li><strong>Selected lesson recordings:</strong> Only recordings explicitly submitted after student audio/video filtering.</li>
+                                    <li><strong>Teaching assets and templates:</strong> Layout scaffolding and pedagogical template structures.</li>
+                                </ol>
+                                <p class="wb-consent-note"><em>All contributions require explicit eligibility verification and privacy scrubbing before informing the unified VFF AI via Project Genome.</em></p>
+                            </div>
+                        </details>
+
+                        <details class="wb-consent-details" id="wbConsentWhatExcluded">
+                            <summary class="wb-consent-summary">
+                                <span><i class="fas fa-user-shield"></i> What is not automatically included?</span>
+                                <i class="fas fa-chevron-down wb-consent-chevron"></i>
+                            </summary>
+                            <div class="wb-consent-details-body">
+                                <p>The following are strictly excluded from automated collection:</p>
+                                <ul class="wb-consent-excluded-list">
+                                    <li>Student names, IDs, rosters, grades, or personal information</li>
+                                    <li>Minor student voices or webcam facial recordings</li>
+                                    <li>Passwords, security tokens, or payment details</li>
+                                    <li>Unrelated personal files or confidential school documents</li>
+                                    <li>Any content outside the stated educational intelligence purpose</li>
+                                </ul>
+                                <p class="wb-consent-note"><em>Teaching Studio operates local-first. We do not claim absolute legal immunity or mathematical model unlearning, but enforce strict data rejection gates.</em></p>
+                            </div>
+                        </details>
+                    </div>
+
+                    <!-- Action Buttons (Equal Visual Importance) -->
+                    <div class="wb-consent-actions">
+                        <button type="button" class="wb-consent-btn wb-consent-btn-secondary" id="wbConsentNotNowBtn">
+                            <i class="fas fa-times"></i> Not Now
+                        </button>
+                        <button type="button" class="wb-consent-btn wb-consent-btn-primary" id="wbConsentAllowBtn">
+                            <i class="fas fa-check"></i> Allow &amp; Help Improve VFF
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PRIVACY & TEACHING DATA SETTINGS MODAL / DRAWER (PHASE 2.7) -->
+            <div id="wbPrivacyModal" class="wb-consent-backdrop" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="wbPrivacyTitle">
+                <div class="wb-privacy-modal">
+                    <div class="wb-consent-header">
+                        <div class="wb-consent-badge">
+                            <i class="fas fa-user-shield"></i>
+                            <span>Privacy &amp; Teaching Data</span>
+                        </div>
+                        <button type="button" class="wb-consent-close-btn" id="wbPrivacyCloseBtn" aria-label="Close Privacy Settings">&times;</button>
+                    </div>
+
+                    <h3 id="wbPrivacyTitle" class="wb-consent-title" style="font-size: 1.25rem;">Teaching Data &amp; Intelligence Settings</h3>
+                    
+                    <div class="wb-privacy-status-box">
+                        <div class="wb-privacy-status-label">Current Choice:</div>
+                        <div class="wb-privacy-status-badge" id="wbPrivacyStatusBadge">
+                            <span class="wb-status-dot"></span>
+                            <span id="wbPrivacyStatusText">Not Chosen</span>
+                        </div>
+                    </div>
+
+                    <p class="wb-privacy-desc" id="wbPrivacyDescText">
+                        When active, anonymous structural signals (lesson stages, tool choices, and template scaffolding) help improve Project Genome and the central VFF AI. Uploaded PDFs, lesson notes, and student details are never automatically shared.
+                    </p>
+
+                    <!-- Toggle / Action Controls -->
+                    <div class="wb-privacy-controls" id="wbPrivacyControls">
+                        <button type="button" class="wb-privacy-action-btn" id="wbPrivacyToggleBtn">
+                            <i class="fas fa-shield-alt"></i> Choose Participation
+                        </button>
+                    </div>
+
+                    <div class="wb-privacy-category-section">
+                        <div class="wb-privacy-section-title">Data Category Eligibility Status</div>
+                        <div class="wb-privacy-category-row">
+                            <div class="wb-cat-info">
+                                <strong>Structural Teaching Signals</strong>
+                                <span>Tool usage, stage sequences, layout templates</span>
+                            </div>
+                            <span class="wb-cat-status" id="wbCatStatusSignals">Pending</span>
+                        </div>
+                        <div class="wb-privacy-category-row">
+                            <div class="wb-cat-info">
+                                <strong>Uploaded Materials &amp; PDFs</strong>
+                                <span>Local session rendering only</span>
+                            </div>
+                            <span class="wb-cat-status status-local">Local Only</span>
+                        </div>
+                        <div class="wb-privacy-category-row">
+                            <div class="wb-cat-info">
+                                <strong>Classroom Recordings</strong>
+                                <span>No recording transmission or AI ingestion</span>
+                            </div>
+                            <span class="wb-cat-status status-local">Local Only</span>
+                        </div>
+                    </div>
+
+                    <!-- Technical Versioning & Audit Metadata -->
+                    <div class="wb-privacy-meta-box">
+                        <div class="wb-meta-row">
+                            <span>Consent Version:</span>
+                            <strong id="wbMetaConsentVer">2.7.0</strong>
+                        </div>
+                        <div class="wb-meta-row">
+                            <span>Policy Version:</span>
+                            <strong id="wbMetaPolicyVer">2026.1</strong>
+                        </div>
+                        <div class="wb-meta-row">
+                            <span>Last Updated:</span>
+                            <span id="wbMetaTimestamp">Not Recorded</span>
+                        </div>
+                    </div>
+
+                    <!-- Raw Local Record Inspector -->
+                    <details class="wb-privacy-raw-details">
+                        <summary class="wb-privacy-raw-summary">View Stored Local Consent Record</summary>
+                        <pre class="wb-privacy-raw-json" id="wbPrivacyRawJson">{}</pre>
+                    </details>
+
+                    <div class="wb-privacy-footer-actions">
+                        <button type="button" class="wb-privacy-reset-btn" id="wbPrivacyResetBtn" title="Clear local consent choice and return to initial state">
+                            <i class="fas fa-undo"></i> Reset Local Privacy Choice
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- LOCAL TEACHING RECORDING MODAL (PHASE 3) -->
+            <div id="wbRecordingModal" class="wb-consent-backdrop wb-recording-backdrop" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="wbRecModalTitle">
+                <div class="wb-recording-modal-card">
+                    <div class="wb-consent-header">
+                        <div class="wb-consent-badge wb-rec-badge">
+                            <i class="fas fa-video"></i>
+                            <span>Local Recording — Not uploaded to VFF</span>
+                        </div>
+                        <button type="button" class="wb-consent-close-btn" id="wbRecCloseBtn" aria-label="Close recording dialog">&times;</button>
+                    </div>
+
+                    <h3 id="wbRecModalTitle" class="wb-consent-title" style="font-size: 1.25rem;">Teaching Session Recording Ready</h3>
+
+                    <!-- Automatic Save / Download Status Indicator -->
+                    <div id="wbRecDownloadNotice" class="wb-rec-download-notice" style="display: none;">
+                        <i class="fas fa-check-circle" id="wbRecDownloadNoticeIcon"></i>
+                        <span id="wbRecDownloadNoticeText">Recording saved to your Downloads.</span>
+                    </div>
+
+                    <div class="wb-rec-player-container">
+                        <video id="wbRecVideoPlayer" controls playsinline preload="metadata" class="wb-rec-video-element" aria-label="Lesson recording video player"></video>
+                    </div>
+
+                    <div class="wb-rec-meta-grid">
+                        <div class="wb-rec-meta-item">
+                            <span class="wb-rec-meta-label">Duration:</span>
+                            <strong id="wbRecDurationLabel" class="wb-rec-meta-val">00:00</strong>
+                        </div>
+                        <div class="wb-rec-meta-item">
+                            <span class="wb-rec-meta-label">Format:</span>
+                            <strong id="wbRecFormatLabel" class="wb-rec-meta-val">WebM</strong>
+                        </div>
+                        <div class="wb-rec-meta-item">
+                            <span class="wb-rec-meta-label">Audio:</span>
+                            <strong id="wbRecAudioLabel" class="wb-rec-meta-val">None</strong>
+                        </div>
+                    </div>
+
+                    <p class="wb-rec-privacy-notice">
+                        <i class="fas fa-shield-alt" style="color: #10b981;"></i> This lesson recording was created completely within your browser. It is held in temporary browser memory and is not uploaded to VFF servers or third-party storage.
+                    </p>
+
+                    <div class="wb-rec-actions-bar">
+                        <button type="button" class="wb-btn wb-btn-danger-ghost" id="wbRecDeleteBtn" title="Discard this recording and free memory">
+                            <i class="fas fa-trash-alt"></i> <span>Delete</span>
+                        </button>
+                        <div class="wb-rec-right-actions">
+                            <button type="button" class="wb-btn wb-btn-secondary" id="wbRecPlayBtn" title="Play recording">
+                                <i class="fas fa-play"></i> <span>Play</span>
+                            </button>
+                            <a id="wbRecDownloadBtn" class="wb-btn wb-btn-primary" download="VFF-Teaching-Session.webm" title="Download recording file to your device">
+                                <i class="fas fa-download"></i> <span>Download / Save</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- BOTTOM AD INVENTORY SLOT (STRUCTURAL PLACEHOLDER FOR FUTURE REVENUE) -->
+        <div id="vffAdBottom" class="vff-ad-slot" aria-label="Advertisement"></div>
+
+        <!-- BELOW THE FOLD: PEOPLE-FIRST SEO & EDUCATIONAL CONTENT -->
+        <article class="toolhub-seo-section" style="max-width: 960px; margin: 40px auto 60px; padding: 0 16px;">
+            
+            <header style="margin-bottom: 32px; text-align: center;">
+                <h2 style="font-size: 1.85rem; font-weight: 800; color: var(--th-text-main); margin-bottom: 12px;">How to Use This Online Whiteboard for Teaching</h2>
+                <p style="font-size: 1.05rem; color: var(--th-text-muted); line-height: 1.6;">Designed specifically for online teachers, tutors, and classroom educators who need an instant, reliable digital whiteboard without sign-ups, subscriptions, or complicated menus.</p>
+            </header>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-bottom: 44px;">
+                <div style="background: var(--th-card-bg, #ffffff); border: 1px solid var(--th-border, #e2e8f0); border-radius: 12px; padding: 24px;">
+                    <div style="width: 42px; height: 42px; border-radius: 10px; background: rgba(37, 99, 235, 0.1); color: #2563eb; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; font-weight: 800; margin-bottom: 14px;">1</div>
+                    <h3 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 8px;">Select Your Tool & Color</h3>
+                    <p style="font-size: 0.95rem; color: var(--th-text-muted); line-height: 1.55;">Choose from freehand pens, highlighters, straight lines, arrows, rectangles, circles, or text placement. Pick your stroke color and line thickness instantly.</p>
+                </div>
+
+                <div style="background: var(--th-card-bg, #ffffff); border: 1px solid var(--th-border, #e2e8f0); border-radius: 12px; padding: 24px;">
+                    <div style="width: 42px; height: 42px; border-radius: 10px; background: rgba(37, 99, 235, 0.1); color: #2563eb; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; font-weight: 800; margin-bottom: 14px;">2</div>
+                    <h3 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 8px;">Annotate Worksheets & PDFs</h3>
+                    <p style="font-size: 0.95rem; color: var(--th-text-muted); line-height: 1.55;">Click 'Annotate PDF Worksheet' or 'Add Image' to import student worksheets, assignment sheets, or educational diagrams directly onto your canvas background.</p>
+                </div>
+
+                <div style="background: var(--th-card-bg, #ffffff); border: 1px solid var(--th-border, #e2e8f0); border-radius: 12px; padding: 24px;">
+                    <div style="width: 42px; height: 42px; border-radius: 10px; background: rgba(37, 99, 235, 0.1); color: #2563eb; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; font-weight: 800; margin-bottom: 14px;">3</div>
+                    <h3 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 8px;">Export or Print Your Lesson</h3>
+                    <p style="font-size: 0.95rem; color: var(--th-text-muted); line-height: 1.55;">When your lesson ends, export a high-resolution PNG image for your students or click 'Print / Save as PDF' to generate printable notes.</p>
+                </div>
+            </div>
+
+            <section style="margin-bottom: 40px;">
+                <h2 style="font-size: 1.6rem; font-weight: 800; color: var(--th-text-main); margin-bottom: 14px;">Why Teachers Use a Lightweight Online Whiteboard</h2>
+                <p style="font-size: 1rem; color: var(--th-text-muted); line-height: 1.7; margin-bottom: 14px;">Most online whiteboards have become bloated enterprise platforms requiring mandatory user accounts, monthly fees, and heavy software downloads. For educators conducting live video classes, this introduces unnecessary friction and lag.</p>
+                <p style="font-size: 1rem; color: var(--th-text-muted); line-height: 1.7;">Victory Fluent Forum's browser whiteboard prioritizes <strong>instant availability, low complexity, and privacy-first local processing</strong>. Whether you are running a class on low-speed internet or giving a quick 1-on-1 tutoring session, the board loads in less than a second and responds cleanly to touch and stylus inputs.</p>
+            </section>
+
+            <section style="margin-bottom: 40px;">
+                <h2 style="font-size: 1.6rem; font-weight: 800; color: var(--th-text-main); margin-bottom: 14px;">How to Teach English with an Online Whiteboard</h2>
+                <p style="font-size: 1rem; color: var(--th-text-muted); line-height: 1.7; margin-bottom: 14px;">Interactive whiteboards are indispensable tools for English language teachers and public speaking coaches. Here are proven ways educators integrate this tool into daily lessons:</p>
+                <ul style="list-style: disc; padding-left: 24px; color: var(--th-text-muted); font-size: 1rem; line-height: 1.8;">
+                    <li><strong>Vocabulary Mind Maps:</strong> Place a target word in the center circle and branch out synonyms, antonyms, and example sentences using colored arrows.</li>
+                    <li><strong>Grammar & Sentence Construction:</strong> Switch to the <em>Ruled Lines</em> background to model correct handwriting, punctuation, and clause structures.</li>
+                    <li><strong>Speech Topic Outlining:</strong> Combine this whiteboard with our free <a href="/tools/speech-topic-generator" style="color: #2563eb; font-weight: 700; text-decoration: underline;">speech topic generator</a> to draft speech hooks, body paragraphs, and call-to-actions live with students.</li>
+                    <li><strong>Speech Speed & Timing Calculations:</strong> Use the canvas alongside our <a href="/tools/speech-length-calculator" style="color: #2563eb; font-weight: 700; text-decoration: underline;">speech timing calculator</a> to visually break down presentation scripts word-by-word.</li>
+                </ul>
+            </section>
+
+            <section style="margin-bottom: 40px;">
+                <h2 style="font-size: 1.6rem; font-weight: 800; color: var(--th-text-main); margin-bottom: 14px;">How to Annotate Worksheets and PDFs</h2>
+                <p style="font-size: 1rem; color: var(--th-text-muted); line-height: 1.7; margin-bottom: 14px;">One of the biggest challenges in remote education is working through printed worksheets digitally. With VFF's built-in PDF renderer, you can open any question paper or assignment worksheet directly inside your browser.</p>
+                <p style="font-size: 1rem; color: var(--th-text-muted); line-height: 1.7;">Use the yellow highlighter to call out key instructions, circle multiple-choice options with the pen tool, or type answers directly into fill-in-the-blank spaces. Explore our collection of <a href="/resources" style="color: #2563eb; font-weight: 700; text-decoration: underline;">downloadable student writing workbooks</a> for printable practice materials.</p>
+            </section>
+
+            <section style="margin-bottom: 40px;">
+                <h2 style="font-size: 1.6rem; font-weight: 800; color: var(--th-text-main); margin-bottom: 14px;">Using the Whiteboard for Online Tutoring</h2>
+                <p style="font-size: 1rem; color: var(--th-text-muted); line-height: 1.7; margin-bottom: 14px;">For private online tutors conducting 1-on-1 sessions on Zoom, Google Meet, Skype, or Microsoft Teams, screen sharing this whiteboard provides a shared visual workspace. Because the board operates 100% inside your browser memory, it consumes minimal RAM, ensuring smooth video and audio during your class.</p>
+                <p style="font-size: 1rem; color: var(--th-text-muted); line-height: 1.7;">Learn more about VFF's interactive public speaking and communication programs by exploring our <a href="/public-speaking-classes-for-kids" style="color: #2563eb; font-weight: 700; text-decoration: underline;">live public speaking classes for kids</a>.</p>
+            </section>
+
+            <section style="margin-bottom: 40px;">
+                <h2 style="font-size: 1.6rem; font-weight: 800; color: var(--th-text-main); margin-bottom: 14px;">Teaching Ideas for Maths, Science, and Public Speaking</h2>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; margin-top: 16px;">
+                    <div style="background: var(--th-card-bg, #ffffff); border: 1px solid var(--th-border, #e2e8f0); border-radius: 10px; padding: 18px;">
+                        <h4 style="font-size: 1.05rem; font-weight: 700; color: var(--th-text-main); margin-bottom: 6px;"><i class="fas fa-calculator" style="color: #2563eb; margin-right: 6px;"></i> Mathematics</h4>
+                        <p style="font-size: 0.92rem; color: var(--th-text-muted); line-height: 1.5;">Enable the <em>Math Grid</em> background to draw coordinate planes, geometry shapes, fractions, and step-by-step algebraic equations.</p>
+                    </div>
+                    <div style="background: var(--th-card-bg, #ffffff); border: 1px solid var(--th-border, #e2e8f0); border-radius: 10px; padding: 18px;">
+                        <h4 style="font-size: 1.05rem; font-weight: 700; color: var(--th-text-main); margin-bottom: 6px;"><i class="fas fa-flask" style="color: #16a34a; margin-right: 6px;"></i> Science Diagrams</h4>
+                        <p style="font-size: 0.92rem; color: var(--th-text-muted); line-height: 1.5;">Upload science diagram images (cell structure, water cycle, solar system) and use arrows and text labels to create interactive quizzes.</p>
+                    </div>
+                    <div style="background: var(--th-card-bg, #ffffff); border: 1px solid var(--th-border, #e2e8f0); border-radius: 10px; padding: 18px;">
+                        <h4 style="font-size: 1.05rem; font-weight: 700; color: var(--th-text-main); margin-bottom: 6px;"><i class="fas fa-bullhorn" style="color: #dc2626; margin-right: 6px;"></i> Public Speaking</h4>
+                        <p style="font-size: 0.92rem; color: var(--th-text-muted); line-height: 1.5;">Map out debate arguments, speech hooks, body language notes, and persuasive speech structures during student practice.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section style="margin-bottom: 40px;">
+                <h2 style="font-size: 1.6rem; font-weight: 800; color: var(--th-text-main); margin-bottom: 14px;">How to Print or Save Your Whiteboard</h2>
+                <p style="font-size: 1rem; color: var(--th-text-muted); line-height: 1.7;">Saving your board work takes a single click. Click <strong>'Export PNG'</strong> to instantly save a crisp image of your annotated canvas to your device. Alternatively, click <strong>'Print / Save as PDF'</strong> to launch your browser's print engine, which cleanly formats your whiteboard canvas onto a printable page while hiding all screen toolbars and menus.</p>
+            </section>
+
+            <!-- FREQUENTLY ASKED QUESTIONS SECTION -->
+            <section style="margin-top: 50px;">
+                <h2 style="font-size: 1.75rem; font-weight: 800; color: var(--th-text-main); text-align: center; margin-bottom: 12px;">Frequently Asked Questions</h2>
+                <p style="font-size: 1rem; color: var(--th-text-muted); text-align: center; margin-bottom: 24px;">Everything you need to know about using Victory Fluent Forum's free online teaching whiteboard.</p>
+
+                <div class="wb-faq-list">
+                    <div class="wb-faq-item">
+                        <button class="wb-faq-question" onclick="toggleFaq(this)">
+                            <span>Is this online whiteboard free to use?</span>
+                            <i class="fas fa-chevron-down wb-faq-icon"></i>
+                        </button>
+                        <div class="wb-faq-answer">
+                            <p>Yes, this whiteboard is 100% free for teachers, tutors, students, and classroom educators. There are no trial periods, paid features, or subscription fees.</p>
+                        </div>
+                    </div>
+
+                    <div class="wb-faq-item">
+                        <button class="wb-faq-question" onclick="toggleFaq(this)">
+                            <span>Do I need to create an account or log in?</span>
+                            <i class="fas fa-chevron-down wb-faq-icon"></i>
+                        </button>
+                        <div class="wb-faq-answer">
+                            <p>No registration or account creation is required. You can launch the whiteboard instantly in any web browser and start teaching right away.</p>
+                        </div>
+                    </div>
+
+                    <div class="wb-faq-item">
+                        <button class="wb-faq-question" onclick="toggleFaq(this)">
+                            <span>Can teachers use it for English lessons and worksheets?</span>
+                            <i class="fas fa-chevron-down wb-faq-icon"></i>
+                        </button>
+                        <div class="wb-faq-answer">
+                            <p>Absolutely. You can draw vocabulary maps, write grammar rules on the ruled-lines grid, or upload PDF worksheets to annotate question papers live during your classes.</p>
+                        </div>
+                    </div>
+
+                    <div class="wb-faq-item">
+                        <button class="wb-faq-question" onclick="toggleFaq(this)">
+                            <span>Are my uploaded PDF files or images uploaded to your servers?</span>
+                            <i class="fas fa-chevron-down wb-faq-icon"></i>
+                        </button>
+                        <div class="wb-faq-answer">
+                            <p>No. Your privacy is fully preserved. All uploaded PDFs, images, and drawings are processed strictly inside your local browser memory. Nothing is uploaded to VFF servers.</p>
+                        </div>
+                    </div>
+
+                    <div class="wb-faq-item">
+                        <button class="wb-faq-question" onclick="toggleFaq(this)">
+                            <span>Does it work on tablets, iPads, and stylus devices?</span>
+                            <i class="fas fa-chevron-down wb-faq-icon"></i>
+                        </button>
+                        <div class="wb-faq-answer">
+                            <p>Yes. The whiteboard supports touchscreen input and pointer devices, including Apple Pencil on iPad, Samsung S-Pen, and Microsoft Surface stylus devices.</p>
+                        </div>
+                    </div>
+
+                    <div class="wb-faq-item">
+                        <button class="wb-faq-question" onclick="toggleFaq(this)">
+                            <span>Can I print or save the board as a PDF?</span>
+                            <i class="fas fa-chevron-down wb-faq-icon"></i>
+                        </button>
+                        <div class="wb-faq-answer">
+                            <p>Yes. Click 'Export PNG' to download a high-resolution image of your board, or click 'Print / Save as PDF' to open your browser's print window and save your board as a PDF document.</p>
+                        </div>
+                    </div>
+
+                    <div class="wb-faq-item">
+                        <button class="wb-faq-question" onclick="toggleFaq(this)">
+                            <span>How do I use this whiteboard for online tutoring on Zoom or Google Meet?</span>
+                            <i class="fas fa-chevron-down wb-faq-icon"></i>
+                        </button>
+                        <div class="wb-faq-answer">
+                            <p>Simply open the whiteboard in your web browser and click 'Share Screen' inside your Zoom, Google Meet, or Microsoft Teams meeting window. Your students will see your drawings and annotations in real time.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </article>
+
+        <!-- SECTION: TEACHER FEEDBACK & FEATURE REQUESTS (ZERO BACKEND REQUIRED) -->
+        <section class="wb-feedback-section" id="wbFeedbackSection">
+            <div class="wb-feedback-card">
+                <div class="wb-feedback-header">
+                    <span class="wb-feedback-badge"><i class="fas fa-lightbulb"></i> Built for Teachers • Shaped by Teachers</span>
+                    <h2 class="wb-feedback-title">Help Us Build a Better Teaching Studio</h2>
+                    <p class="wb-feedback-sub">Have an idea, feature request, or teaching workflow you'd love to see? Tell the VFF team.</p>
+                </div>
+
+                <div class="wb-feedback-voting">
+                    <h3 class="wb-feedback-prompt">What should we build next?</h3>
+                    <p class="wb-feedback-hint">Click an idea below to add it to your feedback message:</p>
+                    <div class="wb-feedback-chips" id="wbFeedbackChips">
+                        <button type="button" class="wb-feedback-chip" data-topic="PPT / PPTX Support">+ PPT / PPTX Support</button>
+                        <button type="button" class="wb-feedback-chip" data-topic="More Math Tools">+ More Math Tools</button>
+                        <button type="button" class="wb-feedback-chip" data-topic="More Science Diagrams">+ More Science Diagrams</button>
+                        <button type="button" class="wb-feedback-chip" data-topic="Interactive Quizzes">+ Interactive Quizzes</button>
+                        <button type="button" class="wb-feedback-chip" data-topic="More Teaching Templates">+ More Teaching Templates</button>
+                        <button type="button" class="wb-feedback-chip" data-topic="Save Lessons">+ Save Lessons</button>
+                        <button type="button" class="wb-feedback-chip" data-topic="Student Activity Mode">+ Student Activity Mode</button>
+                        <button type="button" class="wb-feedback-chip" data-topic="More Presentation Tools">+ More Presentation Tools</button>
+                    </div>
+                </div>
+
+                <div class="wb-feedback-form">
+                    <div class="wb-feedback-field">
+                        <label for="wbFeedbackText" class="wb-feedback-label">Your idea or feedback:</label>
+                        <textarea id="wbFeedbackText" class="wb-feedback-textarea" rows="3" placeholder="Tell us what would make Teaching Studio more useful for your classroom or online teaching..."></textarea>
+                    </div>
+
+                    <div class="wb-feedback-inputs-row">
+                        <div class="wb-feedback-field">
+                            <label for="wbFeedbackName" class="wb-feedback-label">Name (Optional):</label>
+                            <input type="text" id="wbFeedbackName" class="wb-feedback-input" placeholder="e.g. Mrs. Sharma / Tutor Alex">
+                        </div>
+                        <div class="wb-feedback-field">
+                            <label for="wbFeedbackEmail" class="wb-feedback-label">Email (Optional):</label>
+                            <input type="email" id="wbFeedbackEmail" class="wb-feedback-input" placeholder="e.g. alex@example.com">
+                        </div>
+                    </div>
+
+                    <div class="wb-feedback-notice">
+                        <i class="fas fa-shield-alt"></i> Your feedback is sent only when you choose WhatsApp or Email. No lesson files, student data, or personal info is ever stored or uploaded.
+                    </div>
+
+                    <div class="wb-feedback-actions">
+                        <a id="wbFeedbackWaBtn" href="https://wa.me/919272045032?text=Hi%20Victory%20Fluent%20Forum!%20I%20have%20feedback%20for%20Teaching%20Studio:" target="_blank" rel="noopener noreferrer" class="wb-btn wb-btn-primary wb-feedback-btn">
+                            <i class="fab fa-whatsapp"></i> <span>Send by WhatsApp</span>
+                        </a>
+                        <a id="wbFeedbackMailBtn" href="mailto:contact@victoryfluentforum.com?subject=Teaching%20Studio%20Feedback&body=Hi%20VFF%20Team,%0A%0AMy%20feedback%20for%20Teaching%20Studio%20is:%0A" class="wb-btn wb-btn-secondary wb-feedback-btn">
+                            <i class="fas fa-envelope"></i> <span>Send by Email</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION: FINAL VFF ECOSYSTEM BRAND CTA -->
+        <section class="wb-final-cta-section" id="wbFinalCtaSection">
+            <div class="wb-final-cta-card">
+                <div class="wb-final-cta-badge"><i class="fas fa-award"></i> Victory Fluent Forum</div>
+                <h2 class="wb-final-cta-title">Explore More from Victory Fluent Forum</h2>
+                <p class="wb-final-cta-desc">Discover practical public speaking, creative writing, communication activities, and learning resources designed for students, educators, and families.</p>
+
+                <!-- Curated Content Area: Keep Learning with VFF -->
+                <div class="wb-cta-content-area">
+                    <h3 class="wb-cta-content-heading">Keep Learning with VFF</h3>
+                    <div class="wb-cta-content-grid">
+                        <a href="/blogs/speech-topics-for-kids" class="wb-cta-content-card">
+                            <div class="wb-cta-card-header">
+                                <span class="wb-cta-card-icon" style="color: #60a5fa;"><i class="fas fa-microphone-alt"></i></span>
+                                <span class="wb-cta-card-title">Explore Speech Topics for Kids</span>
+                            </div>
+                            <p class="wb-cta-card-desc">100 stage-ready speech topics, hooks, and outline templates for Grades 1–12.</p>
+                        </a>
+
+                        <a href="/blogs/public-speaking-games-for-kids-at-home" class="wb-cta-content-card">
+                            <div class="wb-cta-card-header">
+                                <span class="wb-cta-card-icon" style="color: #34d399;"><i class="fas fa-bullseye"></i></span>
+                                <span class="wb-cta-card-title">Try Public Speaking Games</span>
+                            </div>
+                            <p class="wb-cta-card-desc">Engaging speaking games and activities to build stage confidence and quick thinking.</p>
+                        </a>
+
+                        <a href="/blogs/how-to-stop-stage-fright-in-10-year-olds" class="wb-cta-content-card">
+                            <div class="wb-cta-card-header">
+                                <span class="wb-cta-card-icon" style="color: #f87171;"><i class="fas fa-shield-alt"></i></span>
+                                <span class="wb-cta-card-title">Read the Stage Confidence Guide</span>
+                            </div>
+                            <p class="wb-cta-card-desc">Proven techniques, pre-assembly checklists, and exercises to conquer stage fear.</p>
+                        </a>
+
+                        <a href="/blogs/extempore-topics-for-class-8-sample-answers" class="wb-cta-content-card">
+                            <div class="wb-cta-card-header">
+                                <span class="wb-cta-card-icon" style="color: #fbbf24;"><i class="fas fa-stopwatch"></i></span>
+                                <span class="wb-cta-card-title">Master Extempore Speech Topics</span>
+                            </div>
+                            <p class="wb-cta-card-desc">20+ impromptu speech topics with winning sample answers and the PREP framework.</p>
+                        </a>
+
+                        <a href="/blogs/story-writing-format" class="wb-cta-content-card">
+                            <div class="wb-cta-card-header">
+                                <span class="wb-cta-card-icon" style="color: #c084fc;"><i class="fas fa-feather-alt"></i></span>
+                                <span class="wb-cta-card-title">Learn Story Writing Format</span>
+                            </div>
+                            <p class="wb-cta-card-desc">The 5 core story elements, plot mountain structures, and creative writing templates.</p>
+                        </a>
+
+                        <a href="/blogs/thought-for-the-day-for-school-assembly-with-explanation" class="wb-cta-content-card">
+                            <div class="wb-cta-card-header">
+                                <span class="wb-cta-card-icon" style="color: #38bdf8;"><i class="fas fa-lightbulb"></i></span>
+                                <span class="wb-cta-card-title">Discover Assembly Speech Thoughts</span>
+                            </div>
+                            <p class="wb-cta-card-desc">50+ meaningful morning assembly quotes with child-friendly explanations.</p>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Primary CTA Action Buttons -->
+                <div class="wb-final-cta-buttons">
+                    <a href="/programs.html" class="wb-btn wb-btn-primary wb-cta-large">
+                        <i class="fas fa-graduation-cap"></i> <span>Explore VFF Programs</span>
+                    </a>
+                    <a href="/resources.html" class="wb-btn wb-btn-light wb-cta-large">
+                        <i class="fas fa-book-open"></i> <span>Explore Resources</span>
+                    </a>
+                    <a href="/index.html" class="wb-btn wb-btn-ghost wb-cta-large">
+                        <i class="fas fa-compass"></i> <span>Visit Victory Fluent Forum</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Global VFF Footer -->
+    <footer class="footer" style="background: var(--th-card-bg, #0f172a); color: #94a3b8; padding: 60px 0 30px; margin-top: 60px; border-top: 1px solid var(--th-border, #1e293b);">
+        <div class="toolhub-container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 40px; margin-bottom: 40px;">
+            <div>
+                <img src="/images/Untitled-500-x-130-px.jpg" alt="Victory Fluent Forum Logo" style="height: 38px; width: auto; margin-bottom: 16px;">
+                <p style="font-size: 0.9rem; line-height: 1.6;">Victory Fluent Forum provides premium public speaking, creative writing, and interactive educational tools designed by educators for students and teachers worldwide.</p>
+            </div>
+
+            <div>
+                <h4 style="color: #f8fafc; font-size: 1rem; font-weight: 700; margin-bottom: 16px;">Popular Educator Tools</h4>
+                <ul style="display: flex; flex-direction: column; gap: 10px; font-size: 0.9rem;">
+                    <li><a href="/tools/online-whiteboard" style="color: #60a5fa; font-weight: 600;">Free Online Whiteboard</a></li>
+                    <li><a href="/tools/speech-topic-generator" style="color: #94a3b8;">Speech Topic Generator</a></li>
+                    <li><a href="/tools/speech-length-calculator" style="color: #94a3b8;">Speech Length & WPM Calculator</a></li>
+                    <li><a href="/tools/" style="color: #94a3b8;">All ToolHub Utilities</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 style="color: #f8fafc; font-size: 1rem; font-weight: 700; margin-bottom: 16px;">Student Programs</h4>
+                <ul style="display: flex; flex-direction: column; gap: 10px; font-size: 0.9rem;">
+                    <li><a href="/public-speaking-classes-for-kids" style="color: #94a3b8;">Public Speaking Classes</a></li>
+                    <li><a href="/creative-writing-classes-for-kids" style="color: #94a3b8;">Creative Writing Classes</a></li>
+                    <li><a href="/programs" style="color: #94a3b8;">All Flagship Programs</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 style="color: #f8fafc; font-size: 1rem; font-weight: 700; margin-bottom: 16px;">Resources & Articles</h4>
+                <ul style="display: flex; flex-direction: column; gap: 10px; font-size: 0.9rem;">
+                    <li><a href="/resources" style="color: #94a3b8;">Student Workbooks</a></li>
+                    <li><a href="/blog" style="color: #94a3b8;">Educator Blog</a></li>
+                    <li><a href="/video-library" style="color: #94a3b8;">Video Library</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="toolhub-container" style="border-top: 1px solid #1e293b; padding-top: 24px; text-align: center; font-size: 0.85rem;">
+            <p>&copy; 2026 Victory Fluent Forum. All rights reserved. Built for educators and students globally.</p>
+        </div>
+    </footer>
+
+    <!-- Shared ToolHub Scripts -->
+    <script src="./js/toolhub-core.js"></script>
+    <script src="./js/whiteboard.js"></script>
+    <script>
+        function toggleFaq(btn) {
+            const item = btn.parentElement;
+            item.classList.toggle('active');
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,30 @@
+{
+  "name": "vff-teaching-studio",
+  "version": "1.0.0",
+  "description": "High-performance client-side interactive whiteboard and PDF annotation studio for online educators and tutors.",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx serve .",
+    "dev": "npx serve . -p 3000"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Zarabagwan/vff-teaching-studio.git"
+  },
+  "keywords": [
+    "whiteboard",
+    "teaching-tools",
+    "edtech",
+    "pdf-annotation",
+    "canvas",
+    "online-tutoring",
+    "interactive-classroom",
+    "html5-canvas"
+  ],
+  "author": "Victory Fluent Forum <support@victoryfluentforum.com> (https://www.victoryfluentforum.com/)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Zarabagwan/vff-teaching-studio/issues"
+  },
+  "homepage": "https://www.victoryfluentforum.com/tools/online-whiteboard"
+}
