@@ -107,6 +107,10 @@
     isPointerOnCanvas: false,
     lastPointerX: 0,
     lastPointerY: 0,
+    // Phase 3.1 / P1: Compositor 30 FPS Throttling & Dirty-Flag Idle Bypass State
+    recordingIsDirty: true,
+    lastRecordingFrameTime: 0,
+    lastRecordingHeartbeatTime: 0,
 
     // Phase 2.8: Teaching Object Selection Engine & Math Toolkit State
     selectedObject: null, // { type: 'image'|'pdf'|'block', id, ref, bounds: {x, y, w, h}, locked: false }
@@ -1435,6 +1439,7 @@
       state.lastX = latestPt.x;
       state.lastY = latestPt.y;
     }
+    markRecordingDirty();
   }
 
   function flushPendingDrawing() {
@@ -1525,6 +1530,7 @@
     }
 
     state.isDrawing = true;
+    markRecordingDirty();
     invalidateCanvasRect();
     const coords = getCanvasCoords(e);
     state.startX = coords.x;
@@ -1575,6 +1581,7 @@
     state.lastPointerX = coords.x;
     state.lastPointerY = coords.y;
     state.isPointerOnCanvas = true;
+    markRecordingDirty();
 
     if (state.isSpotlightActive) {
       updateSpotlight(e);
@@ -1683,6 +1690,7 @@
     }
 
     state.isDrawing = false;
+    markRecordingDirty();
 
     // Commit Stroke to History Stack
     saveState();
@@ -1723,6 +1731,7 @@
 
   function handlePointerLeave(e) {
     state.isPointerOnCanvas = false;
+    markRecordingDirty();
   }
 
   /* ============================================================
@@ -2659,6 +2668,7 @@
           el.style.left = `${newX}px`;
           el.style.top = `${newY}px`;
         }
+        markRecordingDirty();
       }
 
       updateSelectionOverlay();
@@ -2982,6 +2992,7 @@
 
   function commitDirectText() {
     if (!state.isEditingText || !state.activeTextPos) return;
+    markRecordingDirty();
 
     const text = directText.value;
     directText.style.display = 'none';
@@ -3856,6 +3867,7 @@
       block.y = Math.max(5, Math.round(initBlockY + dy));
       el.style.left = block.x + 'px';
       el.style.top = block.y + 'px';
+      markRecordingDirty();
       if (state.selectedObject && state.selectedObject.id === block.id) {
         updateSelectionOverlay();
       }
@@ -3875,6 +3887,7 @@
 
   function renderBlocksDOM() {
     if (!blocksLayer) return;
+    markRecordingDirty();
     blocksLayer.innerHTML = '';
 
     state.lessonBlocks.forEach(block => {
@@ -4496,6 +4509,7 @@
       enable = !state.isSpotlightActive;
     }
     state.isSpotlightActive = enable;
+    markRecordingDirty();
     if (spotlightCanvas) {
       spotlightCanvas.style.display = state.isSpotlightActive ? 'block' : 'none';
       if (state.isSpotlightActive) {
@@ -4521,6 +4535,7 @@
 
   function updateSpotlight(e) {
     if (!state.isSpotlightActive || !spotlightCanvas || !spotlightCtx) return;
+    markRecordingDirty();
     const coords = getCanvasCoords(e);
     const dpr = window.devicePixelRatio || 1;
     const w = canvas.width / dpr;
@@ -4543,6 +4558,7 @@
       enable = !state.isLaserActive;
     }
     state.isLaserActive = enable;
+    markRecordingDirty();
     if (laserCanvas) {
       laserCanvas.style.display = state.isLaserActive ? 'block' : 'none';
       if (state.isLaserActive) {
@@ -4585,6 +4601,7 @@
     state.laserPoints = state.laserPoints.filter(p => now - p.time < 420);
 
     if (state.laserPoints.length > 0) {
+      markRecordingDirty();
       laserCtx.save();
       laserCtx.lineCap = 'round';
       laserCtx.lineJoin = 'round';
@@ -5073,6 +5090,7 @@
   }
 
   function redrawCanvas() {
+    markRecordingDirty();
     ctx.save();
     ctx.setTransform(1, 0, 0, 1, 0, 0);
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -5109,6 +5127,7 @@
 
   function clearBoard() {
     if (confirm('Are you sure you want to clear the whiteboard canvas?')) {
+      markRecordingDirty();
       ctx.save();
       ctx.setTransform(1, 0, 0, 1, 0, 0);
       ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -5153,6 +5172,7 @@
   }
 
   function applyTransform() {
+    markRecordingDirty();
     const transformVal = (Math.abs(state.zoomLevel - 1.0) < 0.001 && state.panX === 0 && state.panY === 0)
       ? 'none'
       : `translate(${state.panX}px, ${state.panY}px) scale(${state.zoomLevel})`;
@@ -5190,6 +5210,7 @@
      ============================================================ */
   function setGridBackground(pattern) {
     state.gridPattern = pattern;
+    markRecordingDirty();
     if (canvasContainer) {
       canvasContainer.className = 'wb-canvas-container grid-' + pattern;
       canvasContainer.setAttribute('data-surface', state.canvasSurface);
@@ -5297,6 +5318,7 @@
      ============================================================ */
   function redrawImageCanvas() {
     if (!imageCanvas || !imageCtx) return;
+    markRecordingDirty();
     const dpr = window.devicePixelRatio || 1;
     imageCtx.save();
     imageCtx.setTransform(1, 0, 0, 1, 0, 0);
@@ -5517,6 +5539,7 @@
   }
 
   function redrawPdfCanvas() {
+    markRecordingDirty();
     if (!pdfCtx || !pdfCanvas || !state.currentPdfPageCanvas) return;
     const dpr = window.devicePixelRatio || 1;
     pdfCtx.save();
@@ -5549,6 +5572,7 @@
 
     pdfCtx.setTransform(1, 0, 0, 1, 0, 0);
     pdfCtx.scale(dpr, dpr);
+    markRecordingDirty();
   }
 
   function renderPdfPage(num) {
@@ -5912,6 +5936,17 @@
     });
   }
 
+  /* ============================================================
+     PHASE 3.1 / P1: COMPOSITOR 30 FPS THROTTLING & DIRTY-FLAG BYPASS
+     ============================================================ */
+  const RECORDING_FRAME_INTERVAL_MS = 1000 / 30; // ~33.33ms (Target 30 FPS for captureStream)
+  const RECORDING_THROTTLE_TOLERANCE_MS = 2.0; // Phase jitter threshold (~31.33ms) for 60Hz/120Hz/144Hz displays
+  const RECORDING_HEARTBEAT_INTERVAL_MS = 1000; // 1s keep-alive heartbeat to prevent captureStream/MediaRecorder starvation
+
+  function markRecordingDirty() {
+    state.recordingIsDirty = true;
+  }
+
   function renderRecordingCompositorFrame() {
     if (!state.recordingCompositorCanvas || !state.recordingCompositorCtx) return;
     const compCtx = state.recordingCompositorCtx;
@@ -6018,9 +6053,27 @@
     }
   }
 
-  function renderRecordingFrameLoop() {
+  function renderRecordingFrameLoop(timestamp) {
     if (!state.isRecording) return;
-    renderRecordingCompositorFrame();
+
+    // requestAnimationFrame passes a DOMHighResTimeStamp (matching performance.now())
+    const now = typeof timestamp === 'number' ? timestamp : performance.now();
+    const elapsedSinceLastRender = now - state.lastRecordingFrameTime;
+
+    // P1.1: 30 FPS Timestamp-Based Compositor Throttling
+    if (elapsedSinceLastRender >= (RECORDING_FRAME_INTERVAL_MS - RECORDING_THROTTLE_TOLERANCE_MS)) {
+      const elapsedSinceLastHeartbeat = now - state.lastRecordingHeartbeatTime;
+      const shouldRender = state.recordingIsDirty || elapsedSinceLastHeartbeat >= RECORDING_HEARTBEAT_INTERVAL_MS;
+
+      // P1.2: Dirty-Flag Idle Compositor Bypass with Conservative Stream Heartbeat
+      if (shouldRender) {
+        renderRecordingCompositorFrame();
+        state.recordingIsDirty = false;
+        state.lastRecordingFrameTime = now;
+        state.lastRecordingHeartbeatTime = now;
+      }
+    }
+
     state.recordingRafId = requestAnimationFrame(renderRecordingFrameLoop);
   }
 
@@ -6125,7 +6178,11 @@
     state.recordingCompositorCtx = state.recordingCompositorCanvas.getContext('2d');
 
     // Initial frame render so stream starts immediately with valid content
+    state.recordingIsDirty = true;
     renderRecordingCompositorFrame();
+    state.lastRecordingFrameTime = performance.now();
+    state.lastRecordingHeartbeatTime = performance.now();
+    state.recordingIsDirty = false;
 
     let stream;
     try {
@@ -6252,6 +6309,7 @@
   function stopRecording() {
     if (!state.isRecording) return;
     state.isRecording = false;
+    state.recordingIsDirty = false;
 
     // Stop compositor render loop
     if (state.recordingRafId) {
@@ -6465,6 +6523,7 @@
   function setCanvasSurface(surface) {
     if (!['white', 'chalkboard', 'blackboard', 'cream'].includes(surface)) return;
     state.canvasSurface = surface;
+    markRecordingDirty();
 
     let bg = '#ffffff';
     if (surface === 'chalkboard') bg = '#133827';
@@ -6519,6 +6578,7 @@
 
   function togglePdfChalkboardMode(forcedState) {
     state.pdfChalkboardMode = (forcedState !== undefined) ? forcedState : !state.pdfChalkboardMode;
+    markRecordingDirty();
     if (pdfCanvas) {
       pdfCanvas.classList.toggle('chalkboard-mode', state.pdfChalkboardMode);
     }
@@ -7437,6 +7497,7 @@
     closeRecordingModal,
     deleteRecording,
     redrawImageCanvas,
+    markRecordingDirty,
     // Phase 2.8 Teaching Object Selection & Mathematics Toolkit Exports
     selectTool,
     selectObject,
