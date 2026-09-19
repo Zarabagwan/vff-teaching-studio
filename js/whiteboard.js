@@ -717,6 +717,13 @@
 
   // DOM Elements References
   let canvas, ctx, canvasContainer, directText;
+  // Phase 1 P0: High-Performance Canvas Infrastructure (Transient Preview, Cached Geometry & Batching)
+  let previewCanvas, previewCtx;
+  let cachedCanvasRect = null;
+  let drawRafId = null;
+  let pendingPoints = [];
+  let strokePoints = [];
+  let lastRenderedIndex = 0;
   let undoBtn, redoBtn, zoomValLabel, pageNumLabel, pageNavGroup;
   let firstPdfBtn, prevPdfBtn, nextPdfBtn, lastPdfBtn;
   let presentBtn, exitPresentBtn, toggleToolbarBtn, toolbarEl;
@@ -877,16 +884,39 @@
     initRecordingUI();
     initSelectionOverlayUI();
 
+    // Phase 1 P0: Dynamic Transient Preview Canvas for Zero-Copy Previews (Highlighter & Shapes)
+    if (canvasContainer && canvas && !previewCanvas) {
+      previewCanvas = document.createElement('canvas');
+      previewCanvas.id = 'wbPreviewCanvas';
+      previewCanvas.className = 'wb-preview-canvas';
+      previewCanvas.style.position = 'absolute';
+      previewCanvas.style.top = '0';
+      previewCanvas.style.left = '0';
+      previewCanvas.style.pointerEvents = 'none';
+      previewCanvas.style.zIndex = '9';
+      previewCanvas.style.display = 'none';
+      previewCanvas.setAttribute('aria-hidden', 'true');
+      canvasContainer.insertBefore(previewCanvas, canvas);
+      previewCtx = previewCanvas.getContext('2d');
+    }
+
     // Setup Canvas Sizing & Crisp High-DPI Resolution
     resizeCanvas();
-    window.addEventListener('resize', debounce(resizeCanvas, 120));
+    window.addEventListener('resize', () => {
+      invalidateCanvasRect();
+      debounce(resizeCanvas, 120)();
+    });
+    window.addEventListener('scroll', invalidateCanvasRect, { passive: true });
+    if (canvasContainer) {
+      canvasContainer.addEventListener('scroll', invalidateCanvasRect, { passive: true });
+    }
 
     // Attach Unified Pointer Events (Mouse, Touch & Stylus)
     canvas.addEventListener('pointerdown', handlePointerDown);
     canvas.addEventListener('pointermove', handlePointerMove);
     canvas.addEventListener('pointerup', handlePointerUp);
-    canvas.addEventListener('pointercancel', handlePointerUp);
-    canvas.addEventListener('pointerleave', () => { state.isPointerOnCanvas = false; });
+    canvas.addEventListener('pointercancel', handlePointerCancel);
+    canvas.addEventListener('pointerleave', handlePointerLeave);
 
     // Prevent Touch Dragging Page Scroll on Canvas
     canvas.addEventListener('touchstart', (e) => {
@@ -1197,6 +1227,21 @@
       }
     }
 
+    if (previewCanvas) {
+      previewCanvas.width = backingW;
+      previewCanvas.height = backingH;
+      previewCanvas.style.width = cssW + 'px';
+      previewCanvas.style.height = cssH + 'px';
+      if (previewCtx) {
+        previewCtx.setTransform(1, 0, 0, 1, 0, 0);
+        previewCtx.scale(dpr, dpr);
+        previewCtx.imageSmoothingEnabled = true;
+        previewCtx.imageSmoothingQuality = 'high';
+      }
+    }
+
+    updateCachedCanvasRect();
+
     // Reset Context Transform Matrix & Apply DPR Scale
     ctx.setTransform(1, 0, 0, 1, 0, 0);
     ctx.scale(dpr, dpr);
@@ -1216,12 +1261,29 @@
   }
 
   /* ============================================================
-     POINTER EVENT HANDLERS (MOUSE, TOUCH, STYLUS)
+     POINTER EVENT HANDLERS (MOUSE, TOUCH, STYLUS) & CACHED GEOMETRY
      ============================================================ */
+  function updateCachedCanvasRect() {
+    if (canvas && typeof canvas.getBoundingClientRect === 'function') {
+      cachedCanvasRect = canvas.getBoundingClientRect();
+    }
+  }
+
+  function getCachedCanvasRect() {
+    if (!cachedCanvasRect || cachedCanvasRect.width === 0 || cachedCanvasRect.height === 0) {
+      updateCachedCanvasRect();
+    }
+    return cachedCanvasRect || (canvas && canvas.getBoundingClientRect ? canvas.getBoundingClientRect() : { left: 0, top: 0, width: 1, height: 1 });
+  }
+
+  function invalidateCanvasRect() {
+    cachedCanvasRect = null;
+  }
+
   function getCanvasCoords(e) {
-    const rect = canvas.getBoundingClientRect();
-    const clientX = e.clientX || (e.touches && e.touches[0] ? e.touches[0].clientX : 0);
-    const clientY = e.clientY || (e.touches && e.touches[0] ? e.touches[0].clientY : 0);
+    const rect = getCachedCanvasRect();
+    const clientX = (e && typeof e.clientX === 'number') ? e.clientX : (e && e.touches && e.touches[0] ? e.touches[0].clientX : 0);
+    const clientY = (e && typeof e.clientY === 'number') ? e.clientY : (e && e.touches && e.touches[0] ? e.touches[0].clientY : 0);
 
     const dpr = window.devicePixelRatio || 1;
     const cssW = canvas.width / dpr;
@@ -1238,8 +1300,151 @@
       y,
       rawX: clientX - rect.left,
       rawY: clientY - rect.top,
-      pressure: (typeof e.pressure === 'number' && e.pressure > 0) ? e.pressure : 0.5
+      pressure: (e && typeof e.pressure === 'number' && e.pressure > 0) ? e.pressure : 0.5
     };
+  }
+
+  function getEraserSize(width) {
+    const w = typeof width === 'number' && width > 0 ? width : 4;
+    return Math.max(8, Math.min(56, Math.round(w * 2.5 + 6)));
+  }
+
+  function updateEraserCursor() {
+    if (!canvas) return;
+    if (state.currentTool !== 'eraser') {
+      canvas.style.cursor = '';
+      return;
+    }
+    const size = getEraserSize(state.strokeWidth);
+    const cursorSize = Math.max(14, Math.min(64, Math.round(size)));
+    const half = cursorSize / 2;
+    const r = Math.max(2, half - 1.5);
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${cursorSize}" height="${cursorSize}" viewBox="0 0 ${cursorSize} ${cursorSize}"><circle cx="${half}" cy="${half}" r="${r}" fill="rgba(255,255,255,0.3)" stroke="#333333" stroke-width="1.5" stroke-dasharray="3,2"/></svg>`;
+    const url = `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
+    canvas.style.cursor = `url("${url}") ${half} ${half}, crosshair`;
+  }
+
+  function drawHighlighterPreview(points) {
+    if (!points || points.length === 0 || !previewCtx || !previewCanvas) return;
+    previewCtx.save();
+    previewCtx.setTransform(1, 0, 0, 1, 0, 0);
+    previewCtx.clearRect(0, 0, previewCanvas.width, previewCanvas.height);
+    const dpr = window.devicePixelRatio || 1;
+    previewCtx.scale(dpr, dpr);
+    previewCtx.globalAlpha = 0.22;
+    previewCtx.strokeStyle = state.strokeColor;
+    previewCtx.lineWidth = Math.max(state.strokeWidth * 3, 24);
+    previewCtx.lineCap = 'round';
+    previewCtx.lineJoin = 'round';
+
+    previewCtx.beginPath();
+    previewCtx.moveTo(points[0].x, points[0].y);
+    if (points.length === 1) {
+      previewCtx.lineTo(points[0].x + 0.1, points[0].y);
+    } else {
+      for (let i = 1; i < points.length; i++) {
+        previewCtx.lineTo(points[i].x, points[i].y);
+      }
+    }
+    previewCtx.stroke();
+    previewCtx.restore();
+  }
+
+  function processBatchedDrawing() {
+    drawRafId = null;
+    if (!state.isDrawing || pendingPoints.length === 0) return;
+
+    const batch = pendingPoints;
+    pendingPoints = [];
+
+    if (state.currentTool === 'pen') {
+      for (let k = 0; k < batch.length; k++) {
+        const pt = batch[k];
+        const last = strokePoints[strokePoints.length - 1];
+        if (last && Math.hypot(pt.x - last.x, pt.y - last.y) < 0.5) {
+          continue;
+        }
+        strokePoints.push(pt);
+      }
+
+      ctx.save();
+      ctx.globalCompositeOperation = 'source-over';
+      ctx.strokeStyle = state.strokeColor;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+
+      for (let i = lastRenderedIndex; i < strokePoints.length - 1; i++) {
+        const p0 = strokePoints[i];
+        const p1 = strokePoints[i + 1];
+        const press = p1.pressure > 0 ? p1.pressure : (p0.pressure > 0 ? p0.pressure : 0.5);
+        ctx.lineWidth = state.strokeWidth * (press > 0 ? press * 1.5 : 1);
+
+        const midX = (p0.x + p1.x) / 2;
+        const midY = (p0.y + p1.y) / 2;
+
+        ctx.beginPath();
+        if (i === 0) {
+          ctx.moveTo(p0.x, p0.y);
+          ctx.lineTo(midX, midY);
+        } else {
+          const prevMidX = (strokePoints[i - 1].x + p0.x) / 2;
+          const prevMidY = (strokePoints[i - 1].y + p0.y) / 2;
+          ctx.moveTo(prevMidX, prevMidY);
+          ctx.quadraticCurveTo(p0.x, p0.y, midX, midY);
+        }
+        ctx.stroke();
+      }
+      ctx.restore();
+
+      lastRenderedIndex = Math.max(0, strokePoints.length - 1);
+      const latestPt = strokePoints[strokePoints.length - 1];
+      state.lastX = latestPt.x;
+      state.lastY = latestPt.y;
+
+    } else if (state.currentTool === 'highlighter') {
+      for (let k = 0; k < batch.length; k++) {
+        state.currentPath.push(batch[k]);
+      }
+      drawHighlighterPreview(state.currentPath);
+      const latestPt = batch[batch.length - 1];
+      state.lastX = latestPt.x;
+      state.lastY = latestPt.y;
+
+    } else if (state.currentTool === 'eraser') {
+      ctx.save();
+      ctx.globalCompositeOperation = 'destination-out';
+      ctx.lineWidth = getEraserSize(state.strokeWidth);
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+
+      for (let k = 0; k < batch.length; k++) {
+        const pt = batch[k];
+        ctx.beginPath();
+        ctx.moveTo(state.lastX, state.lastY);
+        ctx.lineTo(pt.x, pt.y);
+        ctx.stroke();
+        state.lastX = pt.x;
+        state.lastY = pt.y;
+      }
+      ctx.restore();
+
+    } else if (isShapeTool(state.currentTool)) {
+      const latestPt = batch[batch.length - 1];
+      redrawCanvas();
+      drawShapePreview(state.startX, state.startY, latestPt.x, latestPt.y, state.currentTool, true);
+      state.lastX = latestPt.x;
+      state.lastY = latestPt.y;
+    }
+  }
+
+  function flushPendingDrawing() {
+    if (drawRafId) {
+      cancelAnimationFrame(drawRafId);
+      drawRafId = null;
+    }
+    if (pendingPoints.length > 0) {
+      processBatchedDrawing();
+    }
   }
 
   const SHAPE_TOOLS = [
@@ -1308,17 +1513,60 @@
       commitDirectText();
     }
 
+    // Refresh canvas geometry cache at start of stroke
+    updateCachedCanvasRect();
+
+    // Pointer capture for smooth gestures
+    if (e.pointerId !== undefined && typeof canvas.setPointerCapture === 'function') {
+      try {
+        canvas.setPointerCapture(e.pointerId);
+        state.activePointerId = e.pointerId;
+      } catch (err) {}
+    }
+
     state.isDrawing = true;
+    invalidateCanvasRect();
     const coords = getCanvasCoords(e);
     state.startX = coords.x;
     state.startY = coords.y;
     state.lastX = coords.x;
     state.lastY = coords.y;
 
-    if (state.currentTool === 'pen' || state.currentTool === 'highlighter' || state.currentTool === 'eraser') {
-      state.currentPath = [{ x: coords.x, y: coords.y, pressure: coords.pressure }];
+    if (drawRafId) {
+      cancelAnimationFrame(drawRafId);
+      drawRafId = null;
+    }
+    pendingPoints = [];
+    strokePoints = [{ x: coords.x, y: coords.y, pressure: coords.pressure }];
+    lastRenderedIndex = 0;
+
+    if (state.currentTool === 'pen') {
+      // Immediate crisp single dot at contact point
+      ctx.save();
+      ctx.globalCompositeOperation = 'source-over';
+      ctx.fillStyle = state.strokeColor;
+      const press = coords.pressure > 0 ? coords.pressure : 0.5;
+      const r = Math.max(0.75, (state.strokeWidth * (press > 0 ? press * 1.5 : 1)) / 2);
       ctx.beginPath();
-      ctx.moveTo(coords.x, coords.y);
+      ctx.arc(coords.x, coords.y, r, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    } else if (state.currentTool === 'highlighter') {
+      state.currentPath = [{ x: coords.x, y: coords.y }];
+      if (previewCanvas && previewCtx) {
+        previewCanvas.style.zIndex = '9';
+        previewCanvas.style.display = 'block';
+        drawHighlighterPreview(state.currentPath);
+      }
+    } else if (state.currentTool === 'eraser') {
+      // Immediate precision eraser dot at contact point
+      ctx.save();
+      ctx.globalCompositeOperation = 'destination-out';
+      const eraserRadius = getEraserSize(state.strokeWidth) / 2;
+      ctx.beginPath();
+      ctx.arc(coords.x, coords.y, eraserRadius, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
     }
   }
 
@@ -1350,49 +1598,23 @@
 
     if (!state.isDrawing) return;
 
-    if (state.currentTool === 'pen') {
-      ctx.save();
-      ctx.globalCompositeOperation = 'source-over';
-      ctx.strokeStyle = state.strokeColor;
-      ctx.lineWidth = state.strokeWidth * (coords.pressure > 0 ? coords.pressure * 1.5 : 1);
-      ctx.lineCap = 'round';
-      ctx.lineJoin = 'round';
+    pendingPoints.push(coords);
 
-      ctx.beginPath();
-      ctx.moveTo(state.lastX, state.lastY);
-      ctx.lineTo(coords.x, coords.y);
-      ctx.stroke();
-      ctx.restore();
-
-      state.lastX = coords.x;
-      state.lastY = coords.y;
-    } else if (state.currentTool === 'highlighter') {
-      state.currentPath.push({ x: coords.x, y: coords.y });
-      redrawCanvas();
-      drawHighlighterStroke(state.currentPath);
-      state.lastX = coords.x;
-      state.lastY = coords.y;
-    } else if (state.currentTool === 'eraser') {
-      ctx.save();
-      ctx.globalCompositeOperation = 'destination-out';
-      ctx.lineWidth = Math.max(state.strokeWidth * 4, 26);
-      ctx.lineCap = 'round';
-
-      ctx.beginPath();
-      ctx.moveTo(state.lastX, state.lastY);
-      ctx.lineTo(coords.x, coords.y);
-      ctx.stroke();
-      ctx.restore();
-
-      state.lastX = coords.x;
-      state.lastY = coords.y;
-    } else if (isShapeTool(state.currentTool)) {
-      redrawCanvas();
-      drawShapePreview(state.startX, state.startY, coords.x, coords.y, state.currentTool, true);
+    if (!drawRafId) {
+      drawRafId = requestAnimationFrame(processBatchedDrawing);
     }
   }
 
   function handlePointerUp(e) {
+    if (state.activePointerId !== undefined && state.activePointerId !== null) {
+      try {
+        if (typeof canvas.releasePointerCapture === 'function') {
+          canvas.releasePointerCapture(state.activePointerId);
+        }
+      } catch (err) {}
+      state.activePointerId = null;
+    }
+
     if (state.selectionDragMode) {
       handleSelectionDragEnd(e);
       return;
@@ -1405,19 +1627,53 @@
     }
 
     if (!state.isDrawing) return;
-    state.isDrawing = false;
+
+    flushPendingDrawing();
 
     const coords = getCanvasCoords(e);
 
-    if (state.currentTool === 'highlighter') {
+    if (state.currentTool === 'pen') {
+      if (strokePoints.length >= 2) {
+        const pPrev = strokePoints[strokePoints.length - 2];
+        const pFinal = strokePoints[strokePoints.length - 1];
+        const lastMidX = (pPrev.x + pFinal.x) / 2;
+        const lastMidY = (pPrev.y + pFinal.y) / 2;
+
+        ctx.save();
+        ctx.globalCompositeOperation = 'source-over';
+        ctx.strokeStyle = state.strokeColor;
+        const press = pFinal.pressure > 0 ? pFinal.pressure : 0.5;
+        ctx.lineWidth = state.strokeWidth * (press > 0 ? press * 1.5 : 1);
+        ctx.lineCap = 'round';
+        ctx.beginPath();
+        ctx.moveTo(lastMidX, lastMidY);
+        ctx.lineTo(pFinal.x, pFinal.y);
+        ctx.stroke();
+        ctx.restore();
+      }
+      strokePoints = [];
+      lastRenderedIndex = 0;
+
+    } else if (state.currentTool === 'highlighter') {
+      if (previewCanvas && previewCtx) {
+        previewCtx.save();
+        previewCtx.setTransform(1, 0, 0, 1, 0, 0);
+        previewCtx.clearRect(0, 0, previewCanvas.width, previewCanvas.height);
+        previewCtx.restore();
+        previewCanvas.style.display = 'none';
+      }
+
       if (state.currentPath && state.currentPath.length > 0) {
         if (coords && (coords.x !== state.lastX || coords.y !== state.lastY)) {
           state.currentPath.push({ x: coords.x, y: coords.y });
         }
-        redrawCanvas();
         drawHighlighterStroke(state.currentPath);
         state.currentPath = [];
       }
+
+    } else if (state.currentTool === 'eraser') {
+      strokePoints = [];
+
     } else if (isShapeTool(state.currentTool)) {
       redrawCanvas();
       drawShapePreview(state.startX, state.startY, coords.x, coords.y, state.currentTool, false);
@@ -1426,9 +1682,47 @@
       }
     }
 
+    state.isDrawing = false;
+
     // Commit Stroke to History Stack
     saveState();
     TeachingSession.logAction('whiteboard_draw', { tool: state.currentTool, subject: state.subjectMode });
+  }
+
+  function handlePointerCancel(e) {
+    if (state.activePointerId !== undefined && state.activePointerId !== null) {
+      try {
+        if (typeof canvas.releasePointerCapture === 'function') {
+          canvas.releasePointerCapture(state.activePointerId);
+        }
+      } catch (err) {}
+      state.activePointerId = null;
+    }
+
+    if (drawRafId) {
+      cancelAnimationFrame(drawRafId);
+      drawRafId = null;
+    }
+    pendingPoints = [];
+    strokePoints = [];
+    lastRenderedIndex = 0;
+
+    if (previewCanvas && previewCtx) {
+      previewCtx.save();
+      previewCtx.setTransform(1, 0, 0, 1, 0, 0);
+      previewCtx.clearRect(0, 0, previewCanvas.width, previewCanvas.height);
+      previewCtx.restore();
+      previewCanvas.style.display = 'none';
+    }
+
+    if (state.isDrawing) {
+      state.isDrawing = false;
+      saveState();
+    }
+  }
+
+  function handlePointerLeave(e) {
+    state.isPointerOnCanvas = false;
   }
 
   /* ============================================================
@@ -4867,6 +5161,10 @@
       canvas.style.transform = transformVal;
       canvas.style.transformOrigin = '0 0';
     }
+    if (previewCanvas) {
+      previewCanvas.style.transform = transformVal;
+      previewCanvas.style.transformOrigin = '0 0';
+    }
     if (pdfCanvas) {
       pdfCanvas.style.transform = transformVal;
       pdfCanvas.style.transformOrigin = '0 0';
@@ -4884,6 +5182,7 @@
       selectionOverlay.style.transform = transformVal;
       selectionOverlay.style.transformOrigin = '0 0';
     }
+    invalidateCanvasRect();
   }
 
   /* ============================================================
@@ -5679,6 +5978,11 @@
       compCtx.drawImage(imageCanvas, offsetX, offsetY, drawW, drawH);
     }
 
+    // Layer 4.5: Active Transient Preview (Highlighter under ink)
+    if (previewCanvas && previewCanvas.style.display !== 'none') {
+      compCtx.drawImage(previewCanvas, offsetX, offsetY, drawW, drawH);
+    }
+
     // Layer 5: Interactive Teaching Ink, Shapes & Annotations Canvas
     if (canvas && canvas.width > 0) {
       compCtx.drawImage(canvas, offsetX, offsetY, drawW, drawH);
@@ -6119,6 +6423,12 @@
         canvas.classList.remove('pan-mode');
         deselectObject();
       }
+    }
+
+    if (toolName === 'eraser') {
+      updateEraserCursor();
+    } else if (canvas) {
+      canvas.style.cursor = '';
     }
 
     if (isShapeTool(toolName)) {
@@ -6763,6 +7073,9 @@
       previewDot.style.width = Math.min(state.strokeWidth, 24) + 'px';
       previewDot.style.height = Math.min(state.strokeWidth, 24) + 'px';
       previewDot.style.backgroundColor = state.strokeColor;
+    }
+    if (state.currentTool === 'eraser') {
+      updateEraserCursor();
     }
   }
 
