@@ -124,7 +124,9 @@
     pdfMaterialTransform: null, // { x, y, width, height, locked: false }
     currentPdfPageCanvas: null,
     isShapesPopoverOpen: false,
-    isMathPopoverOpen: false
+    isMathPopoverOpen: false,
+    // Phase P1.4: Eraser Size UX
+    eraserSize: 24 // 12 (Small), 24 (Medium - default), 40 (Large)
   };
 
   /* ============================================================
@@ -944,6 +946,7 @@
     renderAnnotationsGrid('all');
     updateAdRailFallback();
     initConsentEngine();
+    initEraserSizeUI();
 
     // Close Drawers & Dropdowns on click outside
     document.addEventListener('click', (e) => {
@@ -1319,6 +1322,9 @@
   }
 
   function getEraserSize(width) {
+    if (state && typeof state.eraserSize === 'number') {
+      return state.eraserSize;
+    }
     const w = typeof width === 'number' && width > 0 ? width : 4;
     return Math.max(8, Math.min(56, Math.round(w * 2.5 + 6)));
   }
@@ -6597,6 +6603,203 @@
   }
 
   /* ============================================================
+     ERASER SIZE CONTROLS (PHASE P1.4)
+     Small: 12px | Medium: 24px (Default) | Large: 40px
+     ============================================================ */
+  function setEraserSize(size) {
+    const s = parseInt(size, 10);
+    if (s === 12 || s === 24 || s === 40) {
+      state.eraserSize = s;
+    } else {
+      state.eraserSize = 24;
+    }
+    updateEraserSizeUI();
+    if (state.currentTool === 'eraser') {
+      updateEraserCursor();
+    }
+  }
+
+  function updateEraserSizeUI() {
+    const currentSize = state.eraserSize || 24;
+    const allEraserBtns = document.querySelectorAll('.wb-eraser-size-btn[data-size]');
+    allEraserBtns.forEach((btn) => {
+      const bSize = parseInt(btn.getAttribute('data-size'), 10);
+      btn.classList.toggle('active', bSize === currentSize);
+    });
+  }
+
+  function positionEraserFlyout() {
+    const eraserBtn = document.getElementById('wbToolEraser');
+    const flyout = document.getElementById('wbEraserFlyout');
+    if (!eraserBtn || !flyout) return;
+    const rect = eraserBtn.getBoundingClientRect();
+    flyout.style.top = Math.max(10, Math.round(rect.top + (rect.height / 2) - 18)) + 'px';
+    flyout.style.left = Math.round(rect.right + 10) + 'px';
+  }
+
+  function toggleEraserSizeControls(show) {
+    const contextGroup = document.getElementById('wbEraserSizeGroup');
+    if (contextGroup) {
+      contextGroup.style.display = show ? 'inline-flex' : 'none';
+    }
+    const flyout = document.getElementById('wbEraserFlyout');
+    if (flyout) {
+      if (show) {
+        positionEraserFlyout();
+        flyout.style.display = 'flex';
+      } else {
+        flyout.style.display = 'none';
+      }
+    }
+    if (show) {
+      updateEraserSizeUI();
+    }
+  }
+
+  function initEraserSizeUI() {
+    if (document.getElementById('wb-eraser-size-styles')) return;
+
+    // 1. Inject scoped styles
+    const style = document.createElement('style');
+    style.id = 'wb-eraser-size-styles';
+    style.textContent = `
+      .wb-eraser-size-selector {
+        display: inline-flex;
+        align-items: center;
+        background: var(--wb-workspace-bg, #f1f5f9);
+        border: 1px solid var(--wb-toolbar-border, #e2e8f0);
+        border-radius: 8px;
+        padding: 2px;
+        gap: 2px;
+      }
+      [data-theme="dark"] .wb-eraser-size-selector {
+        background: #0f172a;
+        border-color: #334155;
+      }
+      .wb-eraser-size-btn {
+        border: none;
+        background: transparent;
+        color: var(--wb-text-secondary, #475569);
+        font-size: 0.75rem;
+        font-weight: 600;
+        padding: 4px 10px;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.14s ease;
+        user-select: none;
+        -webkit-user-select: none;
+        touch-action: manipulation;
+      }
+      .wb-eraser-size-btn:hover {
+        color: var(--wb-text-dark, #0f172a);
+        background: rgba(0, 0, 0, 0.05);
+      }
+      [data-theme="dark"] .wb-eraser-size-btn {
+        color: #94a3b8;
+      }
+      [data-theme="dark"] .wb-eraser-size-btn:hover {
+        color: #f8fafc;
+        background: rgba(255, 255, 255, 0.08);
+      }
+      .wb-eraser-size-btn.active {
+        background: #2563eb !important;
+        color: #ffffff !important;
+        font-weight: 700;
+        box-shadow: 0 1px 3px rgba(37, 99, 235, 0.3);
+      }
+      .wb-eraser-flyout {
+        position: fixed;
+        z-index: 60;
+        display: none;
+        align-items: center;
+        gap: 8px;
+        background: var(--wb-toolbar-bg, #ffffff);
+        border: 1px solid var(--wb-toolbar-border, #e2e8f0);
+        box-shadow: 0 8px 24px rgba(15, 23, 42, 0.14);
+        border-radius: 10px;
+        padding: 6px 10px;
+        white-space: nowrap;
+        animation: wbEraserFlyoutFade 0.12s ease-out;
+      }
+      @keyframes wbEraserFlyoutFade {
+        from { opacity: 0; transform: translateY(-3px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+      [data-theme="dark"] .wb-eraser-flyout {
+        background: #1e293b;
+        border-color: #334155;
+        box-shadow: 0 10px 28px rgba(0, 0, 0, 0.45);
+      }
+      .wb-eraser-flyout-label {
+        font-size: 0.72rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: var(--wb-text-muted, #64748b);
+      }
+    `;
+    document.head.appendChild(style);
+
+    // 2. Mount Contextual Bar Eraser Size Group
+    const contextBar = document.querySelector('.wb-context-bar');
+    if (contextBar && !document.getElementById('wbEraserSizeGroup')) {
+      const group = document.createElement('div');
+      group.id = 'wbEraserSizeGroup';
+      group.className = 'wb-param-group wb-eraser-param-group';
+      group.style.display = state.currentTool === 'eraser' ? 'inline-flex' : 'none';
+      group.innerHTML = `
+        <span class="wb-param-label">Eraser</span>
+        <div class="wb-eraser-size-selector" role="group" aria-label="Eraser Size">
+          <button type="button" class="wb-eraser-size-btn" data-size="12" title="Small Eraser (12px)">Small</button>
+          <button type="button" class="wb-eraser-size-btn active" data-size="24" title="Medium Eraser (24px)">Medium</button>
+          <button type="button" class="wb-eraser-size-btn" data-size="40" title="Large Eraser (40px)">Large</button>
+        </div>
+      `;
+      const colorGroup = contextBar.querySelector('.wb-param-group');
+      if (colorGroup && colorGroup.nextElementSibling) {
+        contextBar.insertBefore(group, colorGroup.nextElementSibling);
+      } else {
+        contextBar.appendChild(group);
+      }
+    }
+
+    // 3. Mount Toolbar Flyout next to #wbToolEraser
+    const eraserBtn = document.getElementById('wbToolEraser');
+    if (eraserBtn && !document.getElementById('wbEraserFlyout')) {
+      const flyout = document.createElement('div');
+      flyout.id = 'wbEraserFlyout';
+      flyout.className = 'wb-eraser-flyout';
+      flyout.innerHTML = `
+        <span class="wb-eraser-flyout-label">Eraser</span>
+        <div class="wb-eraser-size-selector" role="group" aria-label="Eraser Size Selector">
+          <button type="button" class="wb-eraser-size-btn" data-size="12" title="Small Eraser (12px)">Small</button>
+          <button type="button" class="wb-eraser-size-btn active" data-size="24" title="Medium Eraser (24px)">Medium</button>
+          <button type="button" class="wb-eraser-size-btn" data-size="40" title="Large Eraser (40px)">Large</button>
+        </div>
+      `;
+
+      eraserBtn.addEventListener('click', () => {
+        positionEraserFlyout();
+      });
+
+      document.body.appendChild(flyout);
+    }
+
+    // 4. Delegate Click & Pointerdown for Immediate Responsiveness
+    document.addEventListener('click', (e) => {
+      const btn = e.target.closest('.wb-eraser-size-btn');
+      if (btn && btn.hasAttribute('data-size')) {
+        e.preventDefault();
+        e.stopPropagation();
+        const size = parseInt(btn.getAttribute('data-size'), 10);
+        setEraserSize(size);
+      }
+    });
+
+    updateEraserSizeUI();
+  }
+
+  /* ============================================================
      UI BINDINGS & CONTROLS SETUP
      ============================================================ */
   function selectTool(toolName) {
@@ -6627,8 +6830,10 @@
 
     if (toolName === 'eraser') {
       updateEraserCursor();
-    } else if (canvas) {
-      canvas.style.cursor = '';
+      toggleEraserSizeControls(true);
+    } else {
+      if (canvas) canvas.style.cursor = '';
+      toggleEraserSizeControls(false);
     }
 
     if (isShapeTool(toolName)) {
@@ -7654,7 +7859,10 @@
     sendBackSelectedObject,
     toggleShapesPopover,
     toggleMathPopover,
-    redrawPdfCanvas
+    redrawPdfCanvas,
+    // Phase P1.4 Eraser Size UX Exports
+    setEraserSize,
+    getEraserSize: () => state.eraserSize
   };
 
 })();
