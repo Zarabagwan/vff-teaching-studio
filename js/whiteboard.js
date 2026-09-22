@@ -1192,6 +1192,9 @@
         pdfCtx.scale(dpr, dpr);
         pdfCtx.imageSmoothingEnabled = true;
         pdfCtx.imageSmoothingQuality = 'high';
+        if (state.currentPdfPageCanvas) {
+          redrawPdfCanvas();
+        }
       }
     }
 
@@ -2929,7 +2932,10 @@
     directText.addEventListener('mousedown', (e) => e.stopPropagation());
     directText.addEventListener('touchstart', (e) => e.stopPropagation());
 
-    directText.addEventListener('input', autoSizeDirectText);
+    directText.addEventListener('input', () => {
+      autoSizeDirectText();
+      markRecordingDirty();
+    });
 
     directText.addEventListener('keydown', (e) => {
       e.stopPropagation();
@@ -2960,6 +2966,7 @@
 
     state.isEditingText = true;
     state.activeTextPos = { rawX, rawY, canvasX, canvasY };
+    markRecordingDirty();
 
     const maxLeft = canvasContainer.clientWidth - 120;
     const maxTop = canvasContainer.clientHeight - 60;
@@ -3029,6 +3036,7 @@
     }
     state.isEditingText = false;
     state.activeTextPos = null;
+    markRecordingDirty();
   }
 
   /* ============================================================
@@ -5953,8 +5961,8 @@
     const targetW = 1920;
     const targetH = 1080;
 
-    const clientW = (canvasContainer && canvasContainer.clientWidth) || canvas.width || 1280;
-    const clientH = (canvasContainer && canvasContainer.clientHeight) || canvas.height || 720;
+    const clientW = (canvasContainer && canvasContainer.clientWidth) || (canvas && canvas.width) || 1280;
+    const clientH = (canvasContainer && canvasContainer.clientHeight) || (canvas && canvas.height) || 720;
     const srcAspect = clientW / clientH;
     const targetAspect = targetW / targetH; // 16:9
 
@@ -5976,7 +5984,10 @@
     const scaleX = drawW / clientW;
     const scaleY = drawH / clientH;
 
-    // Layer 1: Classroom Surface Background Color
+    // Step 1: Clear the Recording Compositor Canvas to Pristine State
+    compCtx.clearRect(0, 0, targetW, targetH);
+
+    // Step 2: Draw Classroom Surface Background Color
     let bg = '#ffffff';
     if (state.canvasSurface === 'chalkboard') bg = '#133827';
     else if (state.canvasSurface === 'blackboard') bg = '#18181b';
@@ -5985,71 +5996,132 @@
     compCtx.fillStyle = bg;
     compCtx.fillRect(0, 0, targetW, targetH);
 
-    // Layer 2: Grid / Canvas Pattern
-    if (!state.pdfLoaded && state.gridPattern && state.gridPattern !== 'blank') {
-      compCtx.save();
-      compCtx.beginPath();
-      compCtx.rect(offsetX, offsetY, drawW, drawH);
-      compCtx.clip();
-      compCtx.translate(offsetX, offsetY);
-      renderGridOnCanvas(compCtx, drawW, drawH, state.gridPattern);
-      compCtx.restore();
-    }
-
-    // Layer 3: Dedicated PDF Underlay Canvas (with Chalkboard mode filter if active)
-    if (state.pdfLoaded && pdfCanvas && pdfCanvas.width > 0) {
-      if (state.pdfChalkboardMode) {
+    // Step 3: Draw Grid / Canvas Pattern (if active & not blank)
+    try {
+      if (!state.pdfLoaded && state.gridPattern && state.gridPattern !== 'blank') {
         compCtx.save();
-        compCtx.filter = 'invert(0.92) hue-rotate(180deg) contrast(1.15) brightness(0.95)';
-        compCtx.drawImage(pdfCanvas, offsetX, offsetY, drawW, drawH);
+        compCtx.beginPath();
+        compCtx.rect(offsetX, offsetY, drawW, drawH);
+        compCtx.clip();
+        compCtx.translate(offsetX, offsetY);
+        renderGridOnCanvas(compCtx, drawW, drawH, state.gridPattern);
         compCtx.restore();
-      } else {
-        compCtx.drawImage(pdfCanvas, offsetX, offsetY, drawW, drawH);
       }
+    } catch (gridErr) {
+      console.error('Recording compositor grid render error:', gridErr);
     }
 
-    // Layer 4: Dedicated Educational Image & Diagram Underlay Canvas
-    if (imageCanvas && imageCanvas.width > 0) {
-      compCtx.drawImage(imageCanvas, offsetX, offsetY, drawW, drawH);
+    // Step 4: Draw Dedicated PDF Underlay Canvas (with Chalkboard mode filter if active)
+    try {
+      if (state.pdfLoaded) {
+        if (pdfCanvas && pdfCanvas.width > 0 && pdfCanvas.height > 0) {
+          if (state.pdfChalkboardMode) {
+            compCtx.save();
+            compCtx.filter = 'invert(0.92) hue-rotate(180deg) contrast(1.15) brightness(0.95)';
+            compCtx.drawImage(pdfCanvas, offsetX, offsetY, drawW, drawH);
+            compCtx.restore();
+          } else {
+            compCtx.drawImage(pdfCanvas, offsetX, offsetY, drawW, drawH);
+          }
+        }
+      }
+    } catch (pdfErr) {
+      console.error('Recording compositor PDF render error:', pdfErr);
     }
 
-    // Layer 4.5: Active Transient Preview (Highlighter under ink)
-    if (previewCanvas && previewCanvas.style.display !== 'none') {
-      compCtx.drawImage(previewCanvas, offsetX, offsetY, drawW, drawH);
+    // Step 5: Draw Dedicated Educational Image & Diagram Underlay Canvas
+    try {
+      if (imageCanvas && imageCanvas.width > 0 && imageCanvas.height > 0) {
+        compCtx.drawImage(imageCanvas, offsetX, offsetY, drawW, drawH);
+      }
+    } catch (imgErr) {
+      console.error('Recording compositor image render error:', imgErr);
     }
 
-    // Layer 5: Interactive Teaching Ink, Shapes & Annotations Canvas
-    if (canvas && canvas.width > 0) {
-      compCtx.drawImage(canvas, offsetX, offsetY, drawW, drawH);
+    // Step 6: Draw Active Transient Preview (Highlighter under ink)
+    try {
+      if (previewCanvas && previewCanvas.style.display !== 'none' && previewCanvas.width > 0 && previewCanvas.height > 0) {
+        compCtx.drawImage(previewCanvas, offsetX, offsetY, drawW, drawH);
+      }
+    } catch (prevErr) {
+      console.error('Recording compositor preview render error:', prevErr);
     }
 
-    // Layer 6: Movable Lesson Blocks Layer
-    renderLessonBlocksOnCompositor(compCtx, offsetX, offsetY, scaleX, scaleY);
-
-    // Layer 7: Presentation Overlays (Spotlight & Laser)
-    if (state.isSpotlightActive && spotlightCanvas && spotlightCanvas.style.display !== 'none') {
-      compCtx.drawImage(spotlightCanvas, offsetX, offsetY, drawW, drawH);
-    }
-    if (state.isLaserActive && laserCanvas && laserCanvas.style.display !== 'none') {
-      compCtx.drawImage(laserCanvas, offsetX, offsetY, drawW, drawH);
+    // Step 7: Draw Interactive Teaching Ink, Shapes & Annotations Canvas
+    try {
+      if (canvas && canvas.width > 0 && canvas.height > 0) {
+        compCtx.drawImage(canvas, offsetX, offsetY, drawW, drawH);
+      }
+    } catch (inkErr) {
+      console.error('Recording compositor ink render error:', inkErr);
     }
 
-    // Layer 8: Active Pointer Indicator (when active)
-    if (state.isPointerOnCanvas && state.lastPointerX !== undefined && state.lastPointerY !== undefined) {
-      const dpr = window.devicePixelRatio || 1;
-      const cssCanvasW = canvas.width / dpr;
-      const cssCanvasH = canvas.height / dpr;
-      const pX = offsetX + (state.lastPointerX / cssCanvasW) * drawW;
-      const pY = offsetY + (state.lastPointerY / cssCanvasH) * drawH;
-      compCtx.save();
-      compCtx.beginPath();
-      compCtx.arc(pX, pY, 5, 0, Math.PI * 2);
-      compCtx.fillStyle = '#ef4444';
-      compCtx.fill();
-      compCtx.strokeStyle = '#ffffff';
-      compCtx.lineWidth = 1.5;
-      compCtx.stroke();
-      compCtx.restore();
+    // Step 8: Draw Movable Lesson Blocks Layer & Active Inline Text
+    try {
+      renderLessonBlocksOnCompositor(compCtx, offsetX, offsetY, scaleX, scaleY);
+    } catch (blocksErr) {
+      console.error('Recording compositor lesson blocks render error:', blocksErr);
+    }
+
+    try {
+      if (state.isEditingText && state.activeTextPos && directText && directText.value) {
+        compCtx.save();
+        compCtx.font = `600 ${Math.max(10, state.fontSize * scaleY)}px ${state.fontFamily}`;
+        compCtx.fillStyle = state.strokeColor;
+        compCtx.textBaseline = 'top';
+        const textX = offsetX + state.activeTextPos.canvasX * scaleX;
+        const textY = offsetY + state.activeTextPos.canvasY * scaleY;
+        const lines = directText.value.split('\n');
+        const lineHeight = (state.fontSize * 1.3) * scaleY;
+        lines.forEach((line, idx) => {
+          compCtx.fillText(line, textX, textY + idx * lineHeight);
+        });
+        compCtx.restore();
+      }
+    } catch (textErr) {
+      console.error('Recording compositor direct text render error:', textErr);
+    }
+
+    // Step 9: Draw Presentation Overlays (Spotlight)
+    try {
+      if (state.isSpotlightActive && spotlightCanvas && spotlightCanvas.style.display !== 'none' && spotlightCanvas.width > 0 && spotlightCanvas.height > 0) {
+        compCtx.drawImage(spotlightCanvas, offsetX, offsetY, drawW, drawH);
+      }
+    } catch (spotErr) {
+      console.error('Recording compositor spotlight render error:', spotErr);
+    }
+
+    // Step 10: Draw Presentation Overlays (Laser)
+    try {
+      if (state.isLaserActive && laserCanvas && laserCanvas.style.display !== 'none' && laserCanvas.width > 0 && laserCanvas.height > 0) {
+        compCtx.drawImage(laserCanvas, offsetX, offsetY, drawW, drawH);
+      }
+    } catch (laserErr) {
+      console.error('Recording compositor laser render error:', laserErr);
+    }
+
+    // Step 11: Draw Active Pointer Indicator (when active)
+    try {
+      if (state.isPointerOnCanvas && state.lastPointerX !== undefined && state.lastPointerY !== undefined && canvas) {
+        const dpr = window.devicePixelRatio || 1;
+        const cssCanvasW = canvas.width / dpr;
+        const cssCanvasH = canvas.height / dpr;
+        if (cssCanvasW > 0 && cssCanvasH > 0) {
+          const pX = offsetX + (state.lastPointerX / cssCanvasW) * drawW;
+          const pY = offsetY + (state.lastPointerY / cssCanvasH) * drawH;
+          compCtx.save();
+          compCtx.beginPath();
+          compCtx.arc(pX, pY, 5, 0, Math.PI * 2);
+          compCtx.fillStyle = '#ef4444';
+          compCtx.fill();
+          compCtx.strokeStyle = '#ffffff';
+          compCtx.lineWidth = 1.5;
+          compCtx.stroke();
+          compCtx.restore();
+        }
+      }
+    } catch (ptrErr) {
+      console.error('Recording compositor pointer render error:', ptrErr);
     }
   }
 
