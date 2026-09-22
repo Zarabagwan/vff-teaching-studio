@@ -111,6 +111,11 @@
     recordingIsDirty: true,
     lastRecordingFrameTime: 0,
     lastRecordingHeartbeatTime: 0,
+    // Phase 3.3 / P1.3: Static Layer Caching State & Metrics
+    recordingStaticCacheCanvas: null,
+    recordingStaticCacheCtx: null,
+    recordingStaticCacheDirty: true,
+    recordingStaticCacheMetrics: { rebuildCount: 0, reuseCount: 0 },
 
     // Phase 2.8: Teaching Object Selection Engine & Math Toolkit State
     selectedObject: null, // { type: 'image'|'pdf'|'block', id, ref, bounds: {x, y, w, h}, locked: false }
@@ -1265,6 +1270,8 @@
     if (state.pdfLoaded && state.pdfDoc) {
       renderPdfPage(state.pdfPageNum);
     }
+
+    invalidateRecordingStaticCache();
   }
 
   /* ============================================================
@@ -2831,6 +2838,7 @@
         pdfCtx.restore();
       }
       updateDocumentHeaderInfo();
+      invalidateRecordingStaticCache();
       deselectObject();
       saveState();
     } else if (targetType === 'block') {
@@ -5218,7 +5226,7 @@
      ============================================================ */
   function setGridBackground(pattern) {
     state.gridPattern = pattern;
-    markRecordingDirty();
+    invalidateRecordingStaticCache();
     if (canvasContainer) {
       canvasContainer.className = 'wb-canvas-container grid-' + pattern;
       canvasContainer.setAttribute('data-surface', state.canvasSurface);
@@ -5326,7 +5334,7 @@
      ============================================================ */
   function redrawImageCanvas() {
     if (!imageCanvas || !imageCtx) return;
-    markRecordingDirty();
+    invalidateRecordingStaticCache();
     const dpr = window.devicePixelRatio || 1;
     imageCtx.save();
     imageCtx.setTransform(1, 0, 0, 1, 0, 0);
@@ -5547,7 +5555,7 @@
   }
 
   function redrawPdfCanvas() {
-    markRecordingDirty();
+    invalidateRecordingStaticCache();
     if (!pdfCtx || !pdfCanvas || !state.currentPdfPageCanvas) return;
     const dpr = window.devicePixelRatio || 1;
     pdfCtx.save();
@@ -5580,7 +5588,7 @@
 
     pdfCtx.setTransform(1, 0, 0, 1, 0, 0);
     pdfCtx.scale(dpr, dpr);
-    markRecordingDirty();
+    invalidateRecordingStaticCache();
   }
 
   function renderPdfPage(num) {
@@ -5955,6 +5963,105 @@
     state.recordingIsDirty = true;
   }
 
+  /* ============================================================
+     PHASE 3.3 / P1.3: STATIC LAYER CACHING FOR RECORDING COMPOSITOR
+     ============================================================ */
+  function invalidateRecordingStaticCache() {
+    state.recordingStaticCacheDirty = true;
+    markRecordingDirty();
+  }
+
+  function renderStaticCacheToCompositor(compCtx, targetW, targetH, offsetX, offsetY, drawW, drawH, bg) {
+    if (!state.recordingStaticCacheCanvas) {
+      state.recordingStaticCacheCanvas = document.createElement('canvas');
+      state.recordingStaticCacheCanvas.width = targetW;
+      state.recordingStaticCacheCanvas.height = targetH;
+      state.recordingStaticCacheCtx = state.recordingStaticCacheCanvas.getContext('2d');
+      state.recordingStaticCacheDirty = true;
+    } else if (state.recordingStaticCacheCanvas.width !== targetW || state.recordingStaticCacheCanvas.height !== targetH) {
+      state.recordingStaticCacheCanvas.width = targetW;
+      state.recordingStaticCacheCanvas.height = targetH;
+      state.recordingStaticCacheDirty = true;
+    }
+
+    const cacheCtx = state.recordingStaticCacheCtx;
+
+    if (state.recordingStaticCacheDirty) {
+      try {
+        // Clear static cache canvas
+        cacheCtx.clearRect(0, 0, targetW, targetH);
+
+        // Step 2: Draw Classroom Surface Background Color
+        cacheCtx.fillStyle = bg;
+        cacheCtx.fillRect(0, 0, targetW, targetH);
+
+        // Step 3: Draw Grid / Canvas Pattern (if active & not blank)
+        try {
+          if (!state.pdfLoaded && state.gridPattern && state.gridPattern !== 'blank') {
+            cacheCtx.save();
+            cacheCtx.beginPath();
+            cacheCtx.rect(offsetX, offsetY, drawW, drawH);
+            cacheCtx.clip();
+            cacheCtx.translate(offsetX, offsetY);
+            renderGridOnCanvas(cacheCtx, drawW, drawH, state.gridPattern);
+            cacheCtx.restore();
+          }
+        } catch (gridErr) {
+          console.error('Recording compositor cache grid render error:', gridErr);
+        }
+
+        // Step 4: Draw Dedicated PDF Underlay Canvas (with Chalkboard mode filter if active)
+        try {
+          if (state.pdfLoaded) {
+            if (pdfCanvas && pdfCanvas.width > 0 && pdfCanvas.height > 0) {
+              if (state.pdfChalkboardMode) {
+                cacheCtx.save();
+                cacheCtx.filter = 'invert(0.92) hue-rotate(180deg) contrast(1.15) brightness(0.95)';
+                cacheCtx.drawImage(pdfCanvas, offsetX, offsetY, drawW, drawH);
+                cacheCtx.restore();
+              } else {
+                cacheCtx.drawImage(pdfCanvas, offsetX, offsetY, drawW, drawH);
+              }
+            }
+          }
+        } catch (pdfErr) {
+          console.error('Recording compositor cache PDF render error:', pdfErr);
+        }
+
+        // Step 5: Draw Dedicated Educational Image & Diagram Underlay Canvas
+        try {
+          if (imageCanvas && imageCanvas.width > 0 && imageCanvas.height > 0) {
+            cacheCtx.drawImage(imageCanvas, offsetX, offsetY, drawW, drawH);
+          }
+        } catch (imgErr) {
+          console.error('Recording compositor cache image render error:', imgErr);
+        }
+
+        state.recordingStaticCacheDirty = false;
+        state.recordingStaticCacheMetrics.rebuildCount++;
+      } catch (cacheErr) {
+        console.error('Recording compositor static cache rebuild error:', cacheErr);
+        state.recordingStaticCacheDirty = true;
+        // Fallback: direct render to compCtx
+        compCtx.fillStyle = bg;
+        compCtx.fillRect(0, 0, targetW, targetH);
+        return;
+      }
+    } else {
+      state.recordingStaticCacheMetrics.reuseCount++;
+    }
+
+    // Blit cached static layers onto the compositor canvas at (0, 0)
+    try {
+      compCtx.drawImage(state.recordingStaticCacheCanvas, 0, 0);
+    } catch (blitErr) {
+      console.error('Recording compositor static cache blit error:', blitErr);
+      // Fallback: direct background fill
+      compCtx.fillStyle = bg;
+      compCtx.fillRect(0, 0, targetW, targetH);
+    }
+  }
+
   function renderRecordingCompositorFrame() {
     if (!state.recordingCompositorCanvas || !state.recordingCompositorCtx) return;
     const compCtx = state.recordingCompositorCtx;
@@ -5987,56 +6094,14 @@
     // Step 1: Clear the Recording Compositor Canvas to Pristine State
     compCtx.clearRect(0, 0, targetW, targetH);
 
-    // Step 2: Draw Classroom Surface Background Color
+    // Compute Background Color
     let bg = '#ffffff';
     if (state.canvasSurface === 'chalkboard') bg = '#133827';
     else if (state.canvasSurface === 'blackboard') bg = '#18181b';
     else if (state.canvasSurface === 'cream') bg = '#fdfbf7';
 
-    compCtx.fillStyle = bg;
-    compCtx.fillRect(0, 0, targetW, targetH);
-
-    // Step 3: Draw Grid / Canvas Pattern (if active & not blank)
-    try {
-      if (!state.pdfLoaded && state.gridPattern && state.gridPattern !== 'blank') {
-        compCtx.save();
-        compCtx.beginPath();
-        compCtx.rect(offsetX, offsetY, drawW, drawH);
-        compCtx.clip();
-        compCtx.translate(offsetX, offsetY);
-        renderGridOnCanvas(compCtx, drawW, drawH, state.gridPattern);
-        compCtx.restore();
-      }
-    } catch (gridErr) {
-      console.error('Recording compositor grid render error:', gridErr);
-    }
-
-    // Step 4: Draw Dedicated PDF Underlay Canvas (with Chalkboard mode filter if active)
-    try {
-      if (state.pdfLoaded) {
-        if (pdfCanvas && pdfCanvas.width > 0 && pdfCanvas.height > 0) {
-          if (state.pdfChalkboardMode) {
-            compCtx.save();
-            compCtx.filter = 'invert(0.92) hue-rotate(180deg) contrast(1.15) brightness(0.95)';
-            compCtx.drawImage(pdfCanvas, offsetX, offsetY, drawW, drawH);
-            compCtx.restore();
-          } else {
-            compCtx.drawImage(pdfCanvas, offsetX, offsetY, drawW, drawH);
-          }
-        }
-      }
-    } catch (pdfErr) {
-      console.error('Recording compositor PDF render error:', pdfErr);
-    }
-
-    // Step 5: Draw Dedicated Educational Image & Diagram Underlay Canvas
-    try {
-      if (imageCanvas && imageCanvas.width > 0 && imageCanvas.height > 0) {
-        compCtx.drawImage(imageCanvas, offsetX, offsetY, drawW, drawH);
-      }
-    } catch (imgErr) {
-      console.error('Recording compositor image render error:', imgErr);
-    }
+    // Steps 2–5: Render Cached Static Visual Layers (Background, Grid, PDF, Image)
+    renderStaticCacheToCompositor(compCtx, targetW, targetH, offsetX, offsetY, drawW, drawH, bg);
 
     // Step 6: Draw Active Transient Preview (Highlighter under ink)
     try {
@@ -6403,6 +6468,11 @@
 
     // Update UI
     updateRecordingUIState(false);
+
+    // Phase 3.3 / P1.3: Clean up static cache to release GPU memory across recording sessions
+    state.recordingStaticCacheCanvas = null;
+    state.recordingStaticCacheCtx = null;
+    state.recordingStaticCacheDirty = true;
   }
 
   function toggleRecording() {
@@ -6595,7 +6665,7 @@
   function setCanvasSurface(surface) {
     if (!['white', 'chalkboard', 'blackboard', 'cream'].includes(surface)) return;
     state.canvasSurface = surface;
-    markRecordingDirty();
+    invalidateRecordingStaticCache();
 
     let bg = '#ffffff';
     if (surface === 'chalkboard') bg = '#133827';
@@ -6650,7 +6720,7 @@
 
   function togglePdfChalkboardMode(forcedState) {
     state.pdfChalkboardMode = (forcedState !== undefined) ? forcedState : !state.pdfChalkboardMode;
-    markRecordingDirty();
+    invalidateRecordingStaticCache();
     if (pdfCanvas) {
       pdfCanvas.classList.toggle('chalkboard-mode', state.pdfChalkboardMode);
     }
@@ -7570,6 +7640,9 @@
     deleteRecording,
     redrawImageCanvas,
     markRecordingDirty,
+    invalidateRecordingStaticCache,
+    renderRecordingCompositorFrame,
+    getStaticCacheMetrics: () => state.recordingStaticCacheMetrics,
     // Phase 2.8 Teaching Object Selection & Mathematics Toolkit Exports
     selectTool,
     selectObject,
